@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.mauricio:postgresql-async_2.11:0.2.20">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/mauricio/postgresql-async_2.11/0.2.20/postgresql-async_2.11-0.2.20.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/mauricio/postgresql-async_2.11/0.2.20/postgresql-async_2.11-0.2.20-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/mauricio/postgresql-async_2.11/0.2.20/postgresql-async_2.11-0.2.20-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
