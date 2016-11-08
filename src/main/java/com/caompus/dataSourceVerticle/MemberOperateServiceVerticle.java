@@ -68,9 +68,11 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
         String userName = paramObj.containsKey("userName")?paramObj.getValue("userName").toString():"";
         String password = paramObj.containsKey("password")?paramObj.getValue("password").toString():"";
 
-        String sqlString = "select * from user where userName = "+userName;
+//        String sqlString = "select * from user where userName = "+userName;
+        StringBuffer sqlbuffer = new StringBuffer().append("select * from user where userName = '").append(userName)
+                .append("' and password='").append(password).append("';");
         JsonObject sqlObj = new JsonObject();
-        sqlObj.put("sqlString",sqlString);
+        sqlObj.put("sqlString",sqlbuffer.toString());
         sqlObj.put("method","select");
 
         Future queryMemberFuture = Future.future();
@@ -82,11 +84,23 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
             String queryResult = ((Message<Object>)queryMemberFuture.result()).body().toString();
             JsonArray retArray = new JsonArray(queryResult);
             if (retArray.size() == 0){
-                failFuture.complete("未查得对象");
+                failFuture.complete("帐号或密码错误");
             }else {
                 JsonObject unitJson = retArray.getJsonObject(0);
+                handler.reply(unitJson.toString());
+
             }
         },failFuture);
+
+        failFuture.setHandler(fail->{
+            if (failFuture.succeeded()){
+                handler.fail(201,failFuture.result().toString());
+                logger.error(failFuture.result().toString());
+            }else {
+                handler.fail(201,failFuture.result().toString());
+                logger.error(failFuture.result().toString());
+            }
+        });
 
     }
     public void test(){
