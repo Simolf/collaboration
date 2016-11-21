@@ -22,6 +22,7 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
 
     public static final Set methodName = new HashSet(){{
        add("innerQueryMember");
+        add("fjkghj");
     }};
 
     @Override
@@ -52,6 +53,8 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
             }
             if ("innerQueryMember".equals(method)){
                 innerQueryMember(handler,paramObj);
+            }else if ("".equals(method)){
+
             }
 
         }catch (Exception e){

@@ -5,6 +5,7 @@ import com.caompus.util.Constants;
 import com.caompus.util.ReturnStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.http.HttpClientRequest;
 import io.vertx.core.http.HttpServer;
@@ -34,7 +35,7 @@ public class HttpService extends AbstractVerticle{
 
     @Override
     public void start() throws Exception {
-        HttpServer server = vertx.createHttpServer();
+        HttpServer server = vertx.createHttpServer();//创建服务器
         Router router = Router.router(vertx);
         router.route().handler(BodyHandler.create());
 
@@ -53,7 +54,7 @@ public class HttpService extends AbstractVerticle{
     }
 
     public void handle(RoutingContext routingContext){
-        HttpServerResponse response = routingContext.response();
+        HttpServerResponse response = routingContext.response();//响应
         map.clear();
 
         for (Map.Entry<String,String> entry:routingContext.request().params().entries()){
@@ -100,19 +101,22 @@ public class HttpService extends AbstractVerticle{
             JsonObject failJson = ReturnStatus.getStatusObj(ReturnStatus.typeOfInnerError);
             failJson.put("data",new JsonArray());
             response.end(failJson.toString());
-            ;logger.error(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
     public void getClassName(HttpServerRequest request){
         className = "";
-        String requestIP = request.remoteAddress().host();   //获取发送请求的IP地址,用于消息推送
+//        String requestIP = request.remoteAddress().host();   //获取发送请求的IP地址,用于消息推送
         if (request.uri().contains("login")){
             map.put("method","login");
-            map.put("requestIP",requestIP);
             className = LoginVerticle.class.getName();
         }
         else if(request.uri().contains("logout")){
-
+            map.put("method","logout");
+            className = LoginVerticle.class.getName();
+        }else if (request.uri().contains("register")){
+            map.put("method","register");
+            className = LoginVerticle.class.getName();
         }
     }
 }
