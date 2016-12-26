@@ -4,7 +4,6 @@ import com.caompus.util.ReturnStatus;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.Message;
-import io.vertx.core.http.WebSocket;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.apache.log4j.Logger;
@@ -21,8 +20,9 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
     Logger logger = Logger.getLogger(MemberOperateServiceVerticle.class);
 
     public static final Set methodName = new HashSet(){{
-       add("innerQueryMember");
-        add("fjkghj");
+        add("login");
+        add("register");
+
     }};
 
     @Override
@@ -51,10 +51,10 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
                 handler.reply(retObj);
                 return;
             }
-            if ("innerQueryMember".equals(method)){
-                innerQueryMember(handler,paramObj);
-            }else if ("".equals(method)){
-
+            if ("login".equals(method)){
+                loginMethod(handler,paramObj);
+            }else if ("register".equals(method)){
+                registerMethod(handler,paramObj);
             }
 
         }catch (Exception e){
@@ -67,19 +67,28 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
      * @param handler
      * @param paramObj
      */
-    public void innerQueryMember(Message<Object> handler,JsonObject paramObj){
-        String userName = paramObj.containsKey("userName")?paramObj.getValue("userName").toString():"";
-        String password = paramObj.containsKey("password")?paramObj.getValue("password").toString():"";
-
-//        String sqlString = "select * from user where userName = "+userName;
-        StringBuffer sqlbuffer = new StringBuffer().append("select * from user where userName = '").append(userName)
-                .append("' and password='").append(password).append("';");
-        JsonObject sqlObj = new JsonObject();
-        sqlObj.put("sqlString",sqlbuffer.toString());
-        sqlObj.put("method","select");
+    public void loginMethod(Message<Object> handler, JsonObject paramObj){
+        JsonObject paramJson = paramObj.containsKey("param")?paramObj.getJsonObject("param"):new JsonObject();
+        String phone = paramJson.containsKey("phone")?paramJson.getValue("phone").toString():"";
+        String password = paramJson.containsKey("password")?paramJson.getValue("password").toString():"";
 
         Future queryMemberFuture = Future.future();
         Future failFuture = Future.future();
+
+        if ("".equals(phone) || "".equals(password)){
+            failFuture.complete("账号或密码为空");
+            return;
+        }
+
+        String sqlString = "select * from user_info where phone = ? and password = ?";
+        JsonArray valueArray = new JsonArray();
+        valueArray.add(phone);
+        valueArray.add(password);
+        JsonObject sqlObj = new JsonObject();
+        sqlObj.put("sqlString", sqlString);
+        sqlObj.put("method","select");
+        sqlObj.put("values",valueArray);
+
 
         vertx.eventBus().send(DataBaseOperationVerticle.class.getName(),sqlObj.toString(),queryMemberFuture.completer());
 
@@ -105,6 +114,49 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
             }
         });
 
+    }
+
+    /**
+     * 用户注册插入数据
+     * @param handler
+     * @param paramObj
+     */
+    public void registerMethod(Message<Object> handler,JsonObject paramObj){
+        JsonObject paramJson = paramObj.containsKey("param")?paramObj.getJsonObject("param"):new JsonObject();
+        String phone = paramJson.containsKey("phone")?paramJson.getValue("phone").toString():"";
+        String password = paramJson.containsKey("password")?paramJson.getValue("password").toString():"";
+        String userName = paramJson.containsKey("userName")?paramJson.getValue("userName").toString():"";
+
+        Future failFuture = Future.future();
+        Future registerFuture = Future.future();
+
+        if ("".equals(phone) || "".equals(password) || "".equals(userName)){
+            failFuture.complete("参数为空");
+            return;
+        }
+
+        String sqlString = "insert into user_info(phone,user_name,password)" +
+                "values(?,?,?)";
+        JsonArray valueArray = new JsonArray();
+        valueArray.add(phone);
+        valueArray.add(userName);
+        valueArray.add(password);
+        JsonObject sqlObj = new JsonObject();
+        sqlObj.put("method","insert");
+        sqlObj.put("sqlString",sqlString);
+        sqlObj.put("values",valueArray);
+
+        vertx.eventBus().send(DataBaseOperationVerticle.class.getName(),sqlObj.toString(),messageAsyncResult -> {
+            String result = messageAsyncResult.result().body().toString();
+            System.out.println(result);
+        });
+
+
+
+        failFuture.setHandler(fail->{
+            handler.fail(201,failFuture.result().toString());
+            logger.error(failFuture.result().toString());
+        });
     }
     public void test(){
 

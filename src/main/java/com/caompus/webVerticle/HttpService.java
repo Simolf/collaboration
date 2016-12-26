@@ -1,6 +1,7 @@
 package com.caompus.webVerticle;
 
 import com.caompus.userVerticle.LoginVerticle;
+import com.caompus.userVerticle.UserInfoVerticle;
 import com.caompus.util.Constants;
 import com.caompus.util.ReturnStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,6 +58,11 @@ public class HttpService extends AbstractVerticle{
         HttpServerResponse response = routingContext.response();//响应
         map.clear();
 
+        if (routingContext.request().uri().contains("html")){
+            response.sendFile("web/page"+routingContext.request().uri());
+            return;
+        }
+
         for (Map.Entry<String,String> entry:routingContext.request().params().entries()){
             map.put(entry.getKey(),entry.getValue());
         }
@@ -106,17 +112,19 @@ public class HttpService extends AbstractVerticle{
     }
     public void getClassName(HttpServerRequest request){
         className = "";
-//        String requestIP = request.remoteAddress().host();   //获取发送请求的IP地址,用于消息推送
         if (request.uri().contains("login")){
+            System.out.println("login");
             map.put("method","login");
             className = LoginVerticle.class.getName();
-        }
-        else if(request.uri().contains("logout")){
+        }else if(request.uri().contains("logout")){
             map.put("method","logout");
             className = LoginVerticle.class.getName();
         }else if (request.uri().contains("register")){
             map.put("method","register");
             className = LoginVerticle.class.getName();
+        }else if (request.uri().contains("personInfo")){
+            map.put("method","personInfo");
+            className = UserInfoVerticle.class.getName();
         }
     }
 }
