@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/collaboration.iml" filepath="$PROJECT_DIR$/collaboration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../credittone-core/credittone-core.iml" filepath="$PROJECT_DIR$/../credittone-core/credittone-core.iml" />
     </modules>
   </component>
 </project>
