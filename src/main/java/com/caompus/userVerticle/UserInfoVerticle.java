@@ -60,6 +60,6 @@ public class UserInfoVerticle extends AbstractVerticle {
         queryJson.put("phone",phone);
         DeliveryOptions options = new DeliveryOptions().setSendTimeout(10 * 1000);
 
-        vertx.eventBus().send(MemberOperateServiceVerticle.class.getName(),queryJson.toString(),options,)
+//        vertx.eventBus().send(MemberOperateServiceVerticle.class.getName(),queryJson.toString(),options,)
     }
 }
