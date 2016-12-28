@@ -26,8 +26,9 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
     }};
 
     @Override
-    public void start() throws Exception {
+    public void start(){
         vertx.eventBus().consumer(this.getClass().getName(),handler->{
+            logger.info("====MemberOperateServiceVerticle start===");
            handle(handler);
         });
     }
@@ -52,6 +53,7 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
                 return;
             }
             if ("login".equals(method)){
+                logger.info("====method login====");
                 loginMethod(handler,paramObj);
             }else if ("register".equals(method)){
                 registerMethod(handler,paramObj);
@@ -68,6 +70,7 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
      * @param paramObj
      */
     public void loginMethod(Message<Object> handler, JsonObject paramObj){
+        logger.info("====MemberOperateServiceVerticle Login===="+paramObj.toString());
         JsonObject paramJson = paramObj.containsKey("param")?paramObj.getJsonObject("param"):new JsonObject();
         String phone = paramJson.containsKey("phone")?paramJson.getValue("phone").toString():"";
         String password = paramJson.containsKey("password")?paramJson.getValue("password").toString():"";
@@ -89,6 +92,8 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
         sqlObj.put("method","select");
         sqlObj.put("values",valueArray);
 
+        logger.info("====login==="+sqlObj.toString());
+
 
         vertx.eventBus().send(DataBaseOperationVerticle.class.getName(),sqlObj.toString(),queryMemberFuture.completer());
 
@@ -96,22 +101,23 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
             String queryResult = ((Message<Object>)queryMemberFuture.result()).body().toString();
             JsonArray retArray = new JsonArray(queryResult);
             if (retArray.size() == 0){
-                failFuture.complete("帐号或密码错误");
+                JsonObject retJson = new JsonObject();
+                retJson.put("status","201");
+                retJson.put("data","账号密码错误");
+                handler.reply(retJson.toString());
             }else {
                 JsonObject unitJson = retArray.getJsonObject(0);
+                System.out.println(unitJson.toString());
                 handler.reply(unitJson.toString());
 
             }
         },failFuture);
 
         failFuture.setHandler(fail->{
-            if (failFuture.succeeded()){
-                handler.fail(201,failFuture.result().toString());
-                logger.error(failFuture.result().toString());
-            }else {
-                handler.fail(201,failFuture.result().toString());
-                logger.error(failFuture.result().toString());
-            }
+            JsonObject retJson = new JsonObject();
+            retJson.put("status","201");
+            retJson.put("data","操作失败");
+            handler.reply(retJson.toString());
         });
 
     }

@@ -70,7 +70,7 @@ public class HttpService extends AbstractVerticle{
 
             getClassName(routingContext.request());
             //标识符
-            String uuid = UUID.randomUUID().toString()+"_"+className;
+            String uuid = UUID.randomUUID().toString();
             String json = "";
             map.put("uuid",uuid);
             //传递的参数

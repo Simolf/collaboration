@@ -34,7 +34,6 @@
     <orderEntry type="library" name="Maven: org.apache.sshd:sshd-core:1.2.0" level="project" />
     <orderEntry type="library" name="Maven: postgresql:postgresql:9.1-901-1.jdbc4" level="project" />
     <orderEntry type="library" name="Maven: io.vertx:vertx-jdbc-client:3.3.2" level="project" />
-    <orderEntry type="library" name="Maven: io.vertx:vertx-sql-common:3.3.2" level="project" />
     <orderEntry type="library" name="Maven: com.mchange:c3p0:0.9.5.2" level="project" />
     <orderEntry type="library" name="Maven: com.mchange:mchange-commons-java:0.2.11" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.12" level="project" />
@@ -51,5 +50,7 @@
     <orderEntry type="library" name="Maven: com.github.mauricio:mysql-async_2.11:0.2.20" level="project" />
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:2.4.5" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.16" level="project" />
+    <orderEntry type="library" name="Maven: io.vertx:vertx-sql-common:3.3.0" level="project" />
+    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.38" level="project" />
   </component>
 </module>

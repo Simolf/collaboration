@@ -55,11 +55,11 @@ public class LoginVerticle extends AbstractVerticle {
         LocalMap<String, JsonObject> permissionMap = vertx.sharedData().getLocalMap(Key.PERMISSION_MAP);//token -> 权限
         JsonObject ret = ReturnStatus.getStatusObj(ReturnStatus.typeOfTokenUnavailable);
         ret.put("token", "");
-        ret.put("active_date", 2);
 
         String param = handler.body().toString();
         JsonObject paramJson = new JsonObject(param);
 
+        logger.info("===Login===="+paramJson.toString());
         String uuid = paramJson.containsKey("uuid") ? paramJson.getString("uuid") : "";
 
         //登录
@@ -70,7 +70,6 @@ public class LoginVerticle extends AbstractVerticle {
         if ("".equals(userPhone) || "".equals(password)) {
             ret = ReturnStatus.getStatusObj(ReturnStatus.typeOfMissParameter);
             ret.put("token", "");
-            ret.put("active_date", 2);
             logger.info(uuid + " " + ret);
             handler.reply(ret.toString());
             return;
@@ -94,7 +93,7 @@ public class LoginVerticle extends AbstractVerticle {
                     //complete调用loginFuture.setHadler
                     loginFuture.complete(ar.result().body().toString());
                 } else {
-                    String str = "用户名校验回调失败" + ar.cause();
+                    String str = "用户名校验回调失败" + ar.cause().getMessage();
                     failFuture.fail(str);
                     logger.error(uuid + " " + str);
                 }
@@ -108,7 +107,6 @@ public class LoginVerticle extends AbstractVerticle {
             loginFuture.setHandler(futureHandler -> {
                 JsonObject finalRet = ReturnStatus.getStatusObj(ReturnStatus.typeOfTokenUnavailable);
                 finalRet.put("token", "");
-                finalRet.put("active_date", 2);
 
                 if (loginFuture.succeeded()) {
                     String futureRes = loginFuture.result().toString();
@@ -117,9 +115,7 @@ public class LoginVerticle extends AbstractVerticle {
                     if (!userInfoJson.isEmpty()) {
                         String userName = userInfoJson.containsKey("userName") ? userInfoJson.getValue("userName").toString() : "";
                         String roleType = userInfoJson.containsKey("roleType") ? userInfoJson.getValue("roleType").toString() : "";
-                        String expirationDate = userInfoJson.containsKey("expirationDate") ? userInfoJson.getValue("expirationDate").toString() : "";
                         finalRet = ReturnStatus.getStatusObj(ReturnStatus.typeOfSuccess);
-                        finalRet.put("active_date", 2);
                         finalRet.put("userName", userName);
                         finalRet.put("token", tokenUUID);
                         finalRet.put("roleType", roleType);
@@ -137,7 +133,6 @@ public class LoginVerticle extends AbstractVerticle {
                         JsonObject permissionObj = new JsonObject();
                         permissionObj.put("userName", userName);
                         permissionObj.put("roleType", roleType);
-                        permissionObj.put("expirationDate", expirationDate);
                         permissionMap.put(tokenUUID, permissionObj);
                         //保存新的token
                         tokenMap.put(tokenKey, tokenUUID);
@@ -169,7 +164,6 @@ public class LoginVerticle extends AbstractVerticle {
                 if (failFuture.failed()) {
                     JsonObject finalRet = ReturnStatus.getStatusObj(ReturnStatus.typeOfTokenUnavailable);
                     finalRet.put("token", "");
-                    finalRet.put("active_date", 2);
                     retString = finalRet.toString();
                 } else {
                     retString = failFuture.result().toString();
