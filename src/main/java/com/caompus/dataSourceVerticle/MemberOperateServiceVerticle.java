@@ -83,7 +83,7 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
             return;
         }
 
-        String sqlString = "select * from user_info where phone = ? and password = ?";
+        String sqlString = "select * from user_base_info where phone = ? and password = ?";
         JsonArray valueArray = new JsonArray();
         valueArray.add(phone);
         valueArray.add(password);
@@ -141,7 +141,7 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
             return;
         }
 
-        String sqlString = "insert into user_info(phone,user_name,password)" +
+        String sqlString = "insert into user_base_info(phone,user_name,password)" +
                 "values(?,?,?)";
         JsonArray valueArray = new JsonArray();
         valueArray.add(phone);
