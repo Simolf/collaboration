@@ -34,6 +34,7 @@ public class DataBaseOperationVerticle extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
+        System.out.println("database init");
         init();
         vertx.eventBus().consumer(this.getClass().getName(), handler -> {
             System.out.println("database handler");
@@ -99,7 +100,7 @@ public class DataBaseOperationVerticle extends AbstractVerticle {
                         List<JsonObject> list = resultSet.getRows();
                         retJson.put("status", "200");
                         retJson.put("data", list);
-                        logger.info(retJson.toString());
+                        logger.info("database retJson:"+retJson.toString());
                         handler.reply(retJson.toString());
                     } else {
                         fail(handler, queryHandler.cause().getCause().toString());

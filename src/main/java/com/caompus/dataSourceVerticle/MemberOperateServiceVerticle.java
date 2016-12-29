@@ -4,6 +4,7 @@ import com.caompus.util.ReturnStatus;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.apache.log4j.Logger;
@@ -53,7 +54,6 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
                 return;
             }
             if ("login".equals(method)){
-                logger.info("====method login====");
                 loginMethod(handler,paramObj);
             }else if ("register".equals(method)){
                 registerMethod(handler,paramObj);
@@ -99,18 +99,16 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
 
         queryMemberFuture.compose(futureHandler->{
             String queryResult = ((Message<Object>)queryMemberFuture.result()).body().toString();
-            JsonArray retArray = new JsonArray(queryResult);
-            if (retArray.size() == 0){
-                JsonObject retJson = new JsonObject();
+            JsonObject queryObj = new JsonObject(queryResult);
+            JsonObject retJson = new JsonObject();
+            if (queryObj.getString("status").equals("200")){
+                retJson.put("status","200");
+                retJson.put("data",queryObj.getJsonArray("data").getJsonObject(0));
+            }else {
                 retJson.put("status","201");
                 retJson.put("data","账号密码错误");
-                handler.reply(retJson.toString());
-            }else {
-                JsonObject unitJson = retArray.getJsonObject(0);
-                System.out.println(unitJson.toString());
-                handler.reply(unitJson.toString());
-
             }
+            handler.reply(retJson.toString());
         },failFuture);
 
         failFuture.setHandler(fail->{

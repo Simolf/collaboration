@@ -50,6 +50,7 @@ public class LoginVerticle extends AbstractVerticle {
      * @param handler
      */
     public void handleLogin(Message<Object> handler) {
+        System.out.println("handler login");
         LocalMap<String, String> tokenMap = vertx.sharedData().getLocalMap(Key.TOKEN_MAP);//userPhone->token
         LocalMap<String, Long> timeMap = vertx.sharedData().getLocalMap(Key.TIME_MAP);    //token->time
         LocalMap<String, JsonObject> permissionMap = vertx.sharedData().getLocalMap(Key.PERMISSION_MAP);//token -> 权限
@@ -65,7 +66,6 @@ public class LoginVerticle extends AbstractVerticle {
         //登录
         String userPhone = paramJson.containsKey("phone") ? paramJson.getValue("phone").toString() : "";        //帐号
         String password = paramJson.containsKey("password") ? paramJson.getValue("password").toString() : "";  //密码
-//        String requestIP = paramJson.containsKey("requestIP")?paramJson.getValue("requestIP").toString():"";   //请求访问的IP地址
 
         if ("".equals(userPhone) || "".equals(password)) {
             ret = ReturnStatus.getStatusObj(ReturnStatus.typeOfMissParameter);
@@ -99,26 +99,26 @@ public class LoginVerticle extends AbstractVerticle {
                 }
             });
 
-
-            CompositeFuture.all(loginFuture, successFuture).setHandler(ar -> {
-
-            });
-
             loginFuture.setHandler(futureHandler -> {
                 JsonObject finalRet = ReturnStatus.getStatusObj(ReturnStatus.typeOfTokenUnavailable);
                 finalRet.put("token", "");
 
                 if (loginFuture.succeeded()) {
                     String futureRes = loginFuture.result().toString();
-                    JsonObject userInfoJson = new JsonObject(futureRes);
+                    JsonObject returnJson = new JsonObject(futureRes);
 
+                    if (!returnJson.getString("status").equals("200")){
+                        failFuture.complete();
+                        return;
+                    }
+                    JsonObject userInfoJson = returnJson.getJsonObject("data");
                     if (!userInfoJson.isEmpty()) {
-                        String userName = userInfoJson.containsKey("userName") ? userInfoJson.getValue("userName").toString() : "";
-                        String roleType = userInfoJson.containsKey("roleType") ? userInfoJson.getValue("roleType").toString() : "";
+                        String userName = userInfoJson.containsKey("user_name") ? userInfoJson.getValue("user_name").toString() : "";
+                        String phone = userInfoJson.containsKey("phone")?userInfoJson.getValue("phone").toString():"";
                         finalRet = ReturnStatus.getStatusObj(ReturnStatus.typeOfSuccess);
                         finalRet.put("userName", userName);
+                        finalRet.put("phone",phone);
                         finalRet.put("token", tokenUUID);
-                        finalRet.put("roleType", roleType);
                         //判断token是否失效，未失效则继续使用
                         if (tokenMap.get(tokenKey) != null && timeMap.get(tokenMap.get(tokenKey)) != null) {
                             if (System.currentTimeMillis() <= timeMap.get(tokenMap.get(tokenKey))) {
@@ -132,7 +132,6 @@ public class LoginVerticle extends AbstractVerticle {
                         //权限
                         JsonObject permissionObj = new JsonObject();
                         permissionObj.put("userName", userName);
-                        permissionObj.put("roleType", roleType);
                         permissionMap.put(tokenUUID, permissionObj);
                         //保存新的token
                         tokenMap.put(tokenKey, tokenUUID);
