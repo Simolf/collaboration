@@ -1,5 +1,6 @@
 package com.caompus.webVerticle;
 
+import com.caompus.userVerticle.IndexVerticle;
 import com.caompus.userVerticle.LoginVerticle;
 import com.caompus.userVerticle.UserInfoVerticle;
 import com.caompus.util.Constants;
@@ -125,6 +126,10 @@ public class HttpService extends AbstractVerticle{
         }else if (request.uri().contains("personInfo")){
             map.put("method","personInfo");
             className = UserInfoVerticle.class.getName();
+        }
+        else if (request.uri().contains("index")){
+            map.put("method","index");
+            className = IndexVerticle.class.getName();
         }
     }
 }
