@@ -2,9 +2,9 @@ package com.caompus;
 
 import com.caompus.dataSourceVerticle.DataBaseOperationVerticle;
 import com.caompus.dataSourceVerticle.MemberOperateServiceVerticle;
-import com.caompus.item.ItemOperationVerticle;
-import com.caompus.item.ItemVerticle;
-import com.caompus.item.TaskOperationVerticle;
+import com.caompus.task.ItemOperationVerticle;
+import com.caompus.task.taskVerticle;
+import com.caompus.task.TaskOperationVerticle;
 import com.caompus.userVerticle.LoginVerticle;
 import com.caompus.userVerticle.UserInfoVerticle;
 import com.caompus.webVerticle.HttpService;
@@ -34,7 +34,7 @@ public class Main {
         vertx.deployVerticle(UserInfoVerticle.class.getName());
 
         //项目详情页
-        vertx.deployVerticle(ItemVerticle.class.getName());
+        vertx.deployVerticle(taskVerticle.class.getName());
         vertx.deployVerticle(ItemOperationVerticle.class.getName());
         vertx.deployVerticle(TaskOperationVerticle.class.getName());
     }

@@ -107,7 +107,7 @@ public class LoginVerticle extends AbstractVerticle {
                     String futureRes = loginFuture.result().toString();
                     JsonObject returnJson = new JsonObject(futureRes);
 
-                    if (!returnJson.getString("status").equals("200")){
+                    if (returnJson.getJsonObject("data").isEmpty()){
                         failFuture.complete();
                         return;
                     }

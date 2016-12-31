@@ -1,4 +1,4 @@
-package com.caompus.item;
+package com.caompus.task;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
@@ -12,9 +12,9 @@ import org.apache.commons.lang3.StringUtils;
  * @author chenxiaoxin
  * @title:
  * @date 2016/12/30
- * @className ItemVerticle
+ * @className taskVerticle
  */
-public class ItemVerticle extends AbstractVerticle {
+public class taskVerticle extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
