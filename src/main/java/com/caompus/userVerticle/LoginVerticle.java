@@ -117,7 +117,7 @@ public class LoginVerticle extends AbstractVerticle {
                         String phone = userInfoJson.containsKey("phone")?userInfoJson.getValue("phone").toString():"";
                         finalRet = ReturnStatus.getStatusObj(ReturnStatus.typeOfSuccess);
                         finalRet.put("userName", userName);
-                        finalRet.put("phone",phone);
+                        finalRet.put("id",phone);
                         finalRet.put("token", tokenUUID);
                         //判断token是否失效，未失效则继续使用
                         if (tokenMap.get(tokenKey) != null && timeMap.get(tokenMap.get(tokenKey)) != null) {

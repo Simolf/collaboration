@@ -69,7 +69,6 @@ public class DataBaseOperationVerticle extends AbstractVerticle {
                SQLConnection connection = connectionHandler.result();
                connection.updateWithParams(sql,values,insertHandler->{
                   if (insertHandler.succeeded()){
-                      retJson.put("status","200");
                       retJson.put("data","操作成功");
                       logger.info(retJson.toString());
                       handler.reply(retJson.toString());
@@ -98,7 +97,6 @@ public class DataBaseOperationVerticle extends AbstractVerticle {
                     if (queryHandler.succeeded()) {
                         ResultSet resultSet = queryHandler.result();
                         List<JsonObject> list = resultSet.getRows();
-                        retJson.put("status", "200");
                         retJson.put("data", list);
                         logger.info("database retJson:"+retJson.toString());
                         handler.reply(retJson.toString());

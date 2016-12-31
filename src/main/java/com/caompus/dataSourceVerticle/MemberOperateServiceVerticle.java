@@ -23,6 +23,8 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
     public static final Set methodName = new HashSet(){{
         add("login");
         add("register");
+        add("userInfo");
+
 
     }};
 
@@ -57,6 +59,8 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
                 loginMethod(handler,paramObj);
             }else if ("register".equals(method)){
                 registerMethod(handler,paramObj);
+            }else if ("userInfo".equals(method)){
+
             }
 
         }catch (Exception e){
@@ -83,7 +87,7 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
             return;
         }
 
-        String sqlString = "select * from user_base_info where phone = ? and password = ?";
+        String sqlString = "select * from t_user_base_info where phone = ? and password = ?";
         JsonArray valueArray = new JsonArray();
         valueArray.add(phone);
         valueArray.add(password);
@@ -101,12 +105,10 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
             String queryResult = ((Message<Object>)queryMemberFuture.result()).body().toString();
             JsonObject queryObj = new JsonObject(queryResult);
             JsonObject retJson = new JsonObject();
-            if (queryObj.getString("status").equals("200")){
-                retJson.put("status","200");
+            if (!queryObj.getJsonArray("data").isEmpty()){
                 retJson.put("data",queryObj.getJsonArray("data").getJsonObject(0));
             }else {
-                retJson.put("status","201");
-                retJson.put("data","账号密码错误");
+                retJson.put("data",new JsonObject());
             }
             handler.reply(retJson.toString());
         },failFuture);
@@ -139,7 +141,7 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
             return;
         }
 
-        String sqlString = "insert into user_base_info(phone,user_name,password)" +
+        String sqlString = "insert into t_user_base_info(phone,user_name,password)" +
                 "values(?,?,?)";
         JsonArray valueArray = new JsonArray();
         valueArray.add(phone);
