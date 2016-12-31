@@ -137,6 +137,8 @@ public class LoginVerticle extends AbstractVerticle {
                         tokenMap.put(tokenKey, tokenUUID);
                         //token保存两个小时，登录有效时间为2个小时
                         timeMap.put(tokenUUID, System.currentTimeMillis() + 2 * 60 * 60 * 1000);
+                        logger.info("===tokenMap==="+tokenMap.get(tokenKey));
+                        logger.info("---timeMap---"+timeMap.get(tokenUUID));
                         successFuture.complete(finalRet.toString());
 
                     } else {

@@ -26,10 +26,10 @@ public class UserInfoVerticle extends AbstractVerticle {
         String paramString = handler.body().toString();
         JsonObject paramObj = new JsonObject(paramString);
 
-        String token = paramObj.containsKey("token") ? paramObj.getValue("token").toString() : "";
+        String token = paramObj.containsKey("phone") ? paramObj.getValue("phone").toString() : "";
         vertx.eventBus().send(TokenCheckVerticle.class.getName(), token, tokenHandler -> {
             if (tokenHandler.succeeded()) {
-                JsonObject tokenResultObj = new JsonObject(tokenHandler.result().toString());
+                JsonObject tokenResultObj = new JsonObject(tokenHandler.result().body().toString());
                 if (tokenResultObj.getString("status").equals("200")){
                     //token回调成功，判断method进行相应操作
                     String method = paramObj.containsKey("method") ? paramObj.getValue("method").toString() : "";
@@ -61,7 +61,20 @@ public class UserInfoVerticle extends AbstractVerticle {
         DeliveryOptions options = new DeliveryOptions().setSendTimeout(10 * 1000);
 
         vertx.eventBus().send(MemberOperateServiceVerticle.class.getName(),queryJson.toString(),options,messageAsyncResult -> {
-
+            if (messageAsyncResult.succeeded()){
+                String restString = messageAsyncResult.result().body().toString();
+                JsonObject restJson = new JsonObject(restString);
+                JsonObject retObj = new JsonObject();
+                if (!restJson.getJsonObject("data").isEmpty()){
+                    retObj.put("status","200");
+                    retObj.put("data",restJson.getJsonObject("data"));
+                    logger.info("==userInfo return:=="+retObj.toString());
+                }else {
+                    retObj.put("status","301");
+                    retObj.put("data",new JsonObject());
+                }
+                handler.reply(retObj.toString());
+            }
         });
     }
 }

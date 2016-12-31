@@ -1,5 +1,7 @@
 package com.caompus.task;
 
+import com.caompus.dataSourceVerticle.MemberOperateServiceVerticle;
+import com.caompus.userVerticle.UserInfoVerticle;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
@@ -62,12 +64,12 @@ public class taskVerticle extends AbstractVerticle {
             return;
         }
         //获取用户信息
-        JsonObject userReqObj = new JsonObject().put("method","getUserInfo").put("userId",userId);
-        vertx.eventBus().send(UserOperationVerticle.class.getName(),userReqObj.toString(),userInfoFuture.completer());
+        JsonObject userReqObj = new JsonObject().put("method","getPersonInfo").put("phone",userId);
+        vertx.eventBus().send(MemberOperateServiceVerticle.class.getName(),userReqObj.toString(),userInfoFuture.completer());
 
         //获取项目信息
         JsonObject itemReqObj = new JsonObject().put("method","itemDetail").put("itemId",itemId);
-        vertx.eventBus().send(ItemOperationVerticle.class.getName(),itemReqObj.toString(),itemInfoFuture.completer());
+        vertx.eventBus().send(OperationVerticle.class.getName(),itemReqObj.toString(),itemInfoFuture.completer());
 
         //获取用户当前项目任务信息
         JsonObject taskReqObj = new JsonObject().put("method","getTaskId").put("userId",userId).put("itemId",itemId);

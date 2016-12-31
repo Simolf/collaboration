@@ -7,6 +7,7 @@ import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import javafx.beans.property.adapter.ReadOnlyJavaBeanBooleanProperty;
 import org.apache.log4j.Logger;
 
 import java.text.SimpleDateFormat;
@@ -23,7 +24,7 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
     public static final Set methodName = new HashSet(){{
         add("login");
         add("register");
-        add("userInfo");
+        add("getPersonInfo");
 
 
     }};
@@ -59,8 +60,8 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
                 loginMethod(handler,paramObj);
             }else if ("register".equals(method)){
                 registerMethod(handler,paramObj);
-            }else if ("userInfo".equals(method)){
-
+            }else if ("getPersonInfo".equals(method)){
+                userInfoMethod(handler);
             }
 
         }catch (Exception e){
@@ -164,7 +165,37 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
             logger.error(failFuture.result().toString());
         });
     }
-    public void test(){
 
+    /**
+     * 获取用户信息
+     * @param handler
+     */
+    public void userInfoMethod(Message<Object> handler){
+        JsonObject paramObj = new JsonObject(handler.body().toString());
+        String phone = paramObj.getString("phone");
+
+        String sql = "select phone,user_name from t_user_base_info where phone = ?";
+        JsonArray values = new JsonArray();
+        values.add(phone);
+        JsonObject sqlObj = new JsonObject();
+        sqlObj.put("method","select");
+        sqlObj.put("sqlString",sql);
+        sqlObj.put("values",values);
+
+        vertx.eventBus().send(DataBaseOperationVerticle.class.getName(),sqlObj.toString(),message->{
+           if(message.succeeded()){
+               String queryStr = ((Message<Object>)message.result()).body().toString();
+               logger.info("userInfo getresponse"+queryStr);
+               JsonObject queryObj = new JsonObject(queryStr);
+               JsonObject retObj = new JsonObject();
+               if (!queryObj.getJsonArray("data").isEmpty()){
+                   retObj.put("data",queryObj.getJsonArray("data").getJsonObject(0));
+               }else {
+                   retObj.put("data",new JsonObject());
+               }
+               logger.info("userInfo response"+retObj.toString());
+               handler.reply(retObj.toString());
+           }
+        });
     }
 }

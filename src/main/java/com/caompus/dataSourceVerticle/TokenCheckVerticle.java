@@ -29,11 +29,17 @@ public class TokenCheckVerticle extends AbstractVerticle{
         retJson.put("status", ReturnStatus.missParameterCode);
         retJson.put("data",paramMissDes);
 
-        String token = handler.body().toString();
+        LocalMap<String, String> tokenMap = vertx.sharedData().getLocalMap(Key.TOKEN_MAP);
         LocalMap<String,Long> timeMap = vertx.sharedData().getLocalMap(Key.TIME_MAP);    //token->time
         LocalMap<String,JsonObject> permissionMap = vertx.sharedData().getLocalMap(Key.PERMISSION_MAP);//token -> 权限
 
+        tokenMap.keySet().forEach(item->{
+            System.out.println("keySet:"+item);
+        });
 
+        String phone = handler.body().toString();
+        String token = tokenMap.get(phone);
+        System.out.println("token:"+token);
         /**
          * token验证
          */
@@ -41,6 +47,7 @@ public class TokenCheckVerticle extends AbstractVerticle{
             retJson.put("status",ReturnStatus.tokenUnavailableCode);
             retJson.put("data",tokenUnavailableDes);
             handler.reply(retJson.toString());
+            return;
         }
 
         Long time = timeMap.get(token);
@@ -58,6 +65,7 @@ public class TokenCheckVerticle extends AbstractVerticle{
             timeMap.put(token,System.currentTimeMillis() + 2*60*60*1000);
             retJson.put("status",ReturnStatus.successCode);
             retJson.put("data",successDes);
+            handler.reply(retJson.toString());
         }
 
 
