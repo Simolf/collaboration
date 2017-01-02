@@ -127,7 +127,7 @@ public class TaskVerticle extends AbstractVerticle {
         JsonObject paramObj = new JsonObject(handler.body().toString());
         JsonObject retJson = new JsonObject();
 
-        String userId = paramObj.containsKey("phone")?paramObj.getValue("phone").toString():"";
+        String userId = paramObj.containsKey("userId")?paramObj.getValue("userId").toString():"";
         int projectId = paramObj.containsKey("projectId")?Integer.parseInt(paramObj.getString("projectId")):0;
         String taskContent = paramObj.containsKey("taskContent")?paramObj.getString("taskContent"):"";
         String participantId = paramObj.containsKey("participantId")?paramObj.getString("participantId"):"";
@@ -249,38 +249,61 @@ public class TaskVerticle extends AbstractVerticle {
 
         JsonObject paramObj = new JsonObject(handler.body().toString());
         String projectId = paramObj.containsKey("projectId")?paramObj.getValue("projectId").toString():"";
-        String target = paramObj.containsKey("target")?paramObj.getValue("target").toString():"";
+        String participantId = paramObj.containsKey("participantId")?paramObj.getValue("participantId").toString():"";
+        String participantName = paramObj.containsKey("participantName")?paramObj.getValue("participantName").toString():"";
         String userId = paramObj.containsKey("userId")?paramObj.getValue("userId").toString():"";
         String userName = paramObj.containsKey("userName")?paramObj.getValue("userName").toString():"";
         String projectName = paramObj.containsKey("projectName")?paramObj.getValue("projectName").toString():"";
 
-        if (StringUtils.isEmpty(projectId) || StringUtils.isEmpty(userId) || StringUtils.isEmpty(target)
+        if (StringUtils.isEmpty(projectId) || StringUtils.isEmpty(userId) || StringUtils.isEmpty(participantId)
                 ||StringUtils.isEmpty(userName) || StringUtils.isEmpty(projectName)){
             retJson.put("status",ReturnStatus.SC_FAIL);
             logger.info("inviteParticipant 参数为空");
             handler.reply(retJson.toString());
             return;
         }
-        String content = userName+" 将您加入项目 "+projectName;
-        paramObj.put("content",content);
-        paramObj.put("method","saveMessage");
-        LocalMap<String, String> tokenMap = vertx.sharedData().getLocalMap(Key.TOKEN_MAP);//userPhone->token
-        LocalMap<String,String> messageMap = vertx.sharedData().getLocalMap(Key.MESSAGE_MAP);//userId ->messageContent
-        if (tokenMap.keySet().contains(target)){
-            paramObj.put("type",1);
-            messageMap.put(target,content);
-        }else {
-            paramObj.put("type",0);
-        }
+        Future messageFuture = Future.future();
 
-        vertx.eventBus().send(MessageVerticle.class.getName(),paramObj.toString(),message->{
+        paramObj.put("method","addParticipant");
+        vertx.eventBus().send(TaskOperationVerticle.class.getName(),paramObj.toString(),message->{
             if (message.succeeded()){
-                handler.reply(message.result().body().toString());
-            }else {
-                retJson.put("status",ReturnStatus.SC_FAIL);
-                handler.reply(retJson.toString());
+                JsonObject respObj = new JsonObject(message.result().body().toString());
+                if (respObj.getInteger("type")!=null && respObj.getInteger("type") == 1){
+                    retJson.put("status",ReturnStatus.SC_OK);
+                    handler.reply(retJson.toString());
+                }else if (respObj.getInteger("status") == ReturnStatus.SC_OK){
+                    messageFuture.complete();
+                }else {
+                    retJson.put("status",ReturnStatus.SC_FAIL);
+                    handler.reply(retJson.toString());
+                }
             }
         });
+
+        messageFuture.setHandler(messageHandler->{
+            String content = userName+" 将您加入项目 "+projectName;
+            paramObj.put("content",content);
+            paramObj.put("method","saveMessage");
+            LocalMap<String, String> tokenMap = vertx.sharedData().getLocalMap(Key.TOKEN_MAP);//userPhone->token
+            LocalMap<String,String> messageMap = vertx.sharedData().getLocalMap(Key.MESSAGE_MAP);//userId ->messageContent
+            if (tokenMap.keySet().contains(participantId)){
+                paramObj.put("type",1);
+                messageMap.put(participantId,content);
+            }else {
+                paramObj.put("type",0);
+            }
+
+            logger.info("messageFuture:"+paramObj.toString());
+            vertx.eventBus().send(MessageVerticle.class.getName(),paramObj.toString(),message->{
+                if (message.succeeded()){
+                    handler.reply(message.result().body().toString());
+                }else {
+                    retJson.put("status",ReturnStatus.SC_FAIL);
+                    handler.reply(retJson.toString());
+                }
+            });
+        });
+
     }
 
 

@@ -45,6 +45,8 @@ public class TaskOperationVerticle extends AbstractVerticle {
             deleteTaskById(handler);
         }else if ("updateTaskStatus".equals(method)){
             updateTaskStatus(handler);
+        }else if ("addParticipant".equals(method)){
+            addParticipant(handler);
         }
     }
 
@@ -52,7 +54,7 @@ public class TaskOperationVerticle extends AbstractVerticle {
      * 任务列表详情
      * @param handler
      */
-    public void handleTaskDetailList(Message<Object> handler){
+    private void handleTaskDetailList(Message<Object> handler){
         JsonObject paramObj = new JsonObject(handler.body().toString());
         String userId = paramObj.containsKey("userId")?paramObj.getValue("userId").toString():"";
         int projectId = paramObj.getInteger("projectId");
@@ -105,7 +107,7 @@ public class TaskOperationVerticle extends AbstractVerticle {
      * 根据任务ID获取任务详情
      * @param hadler
      */
-    public void getTaskDetailById(Message<Object> hadler){
+    private void getTaskDetailById(Message<Object> hadler){
         JsonObject paramObj = new JsonObject(hadler.body().toString());
 
         int taskId = Integer.parseInt(paramObj.getString("taskId"));
@@ -139,7 +141,7 @@ public class TaskOperationVerticle extends AbstractVerticle {
      * 创建任务
      * @param handler
      */
-    public void createTask(Message<Object> handler){
+    private void createTask(Message<Object> handler){
         JsonObject paramObj = new JsonObject(handler.body().toString());
         String userId = paramObj.getValue("phone").toString();
         int projectId =Integer.parseInt(paramObj.getString("projectId"));
@@ -187,7 +189,7 @@ public class TaskOperationVerticle extends AbstractVerticle {
      * 删除任务
      * @param handler
      */
-    public void deleteTaskById(Message<Object>handler){
+    private void deleteTaskById(Message<Object>handler){
         JsonObject paramObj = new JsonObject(handler.body().toString());
         int taskId = Integer.parseInt(paramObj.getString("taskId"));
 
@@ -222,7 +224,7 @@ public class TaskOperationVerticle extends AbstractVerticle {
      * 更新任务转改
      * @param handler
      */
-    public void updateTaskStatus(Message<Object> handler){
+    private void updateTaskStatus(Message<Object> handler){
         JsonObject paramObj = new JsonObject(handler.body().toString());
         int taskId = Integer.parseInt(paramObj.getValue("taskId").toString());
         int status = Integer.parseInt(paramObj.getValue("status").toString());
@@ -252,4 +254,119 @@ public class TaskOperationVerticle extends AbstractVerticle {
            }
         });
     }
+
+    /**
+     * 项目添加参与者
+     * @param handler
+     */
+    private void addParticipant(Message<Object> handler){
+        JsonObject retJson = new JsonObject();
+
+        JsonObject paramObj = new JsonObject(handler.body().toString());
+        int projectId = Integer.parseInt(paramObj.getValue("projectId").toString());
+        String participantId = paramObj.getValue("participantId").toString();
+        String participantName = paramObj.getValue("participantName").toString();
+
+        Future emptyFuture = Future.future();
+        Future addFuture = Future.future();
+        Future updateFuture = Future.future();
+
+        //项目参与人列表为空时新增
+        emptyFuture.setHandler(emptyHandler->{
+           String insertSql = "update t_project set participant = ?::jsonb" +
+                   " where project_id = ?";
+           JsonObject partObj = new JsonObject();
+           partObj.put("id",participantId);
+           partObj.put("name",participantName);
+
+           JsonArray insertValues = new JsonArray();
+           insertValues.add(new JsonArray().add(partObj).toString());
+           insertValues.add(projectId);
+
+           JsonObject updateObj = new JsonObject();
+            updateObj.put(Common.METHOD,Common.METHOD_UPDATE);
+            updateObj.put(Common.SQL_KEY,insertSql);
+            updateObj.put(Common.VALUES_KEY,insertValues);
+
+           updateFuture.complete(updateObj.toString());
+        });
+
+        //项目参与人列表不为空时添加
+        addFuture.setHandler(addHandler->{
+           JsonArray partArray = new JsonArray(addFuture.result().toString());
+           for (int i=0;i<partArray.size();i++){
+               JsonObject itemObj = partArray.getJsonObject(i);
+               if (itemObj.getString("id").equals(participantId)){
+                   retJson.put("status",ReturnStatus.SC_OK);
+                   retJson.put("type",1);
+                   logger.info("参与者已存在");
+                   handler.reply(retJson.toString());
+                   return;
+               }
+           }
+           partArray.add(new JsonObject().put("id",participantId).put("name",participantName));
+            String updateSql = "update t_project set participant = ?::jsonb" +
+                    " where project_id = ?";
+            JsonArray insertArray = new JsonArray();
+            insertArray.add(partArray.toString());
+            insertArray.add(projectId);
+
+            JsonObject updateObj = new JsonObject();
+            updateObj.put(Common.METHOD,Common.METHOD_UPDATE);
+            updateObj.put(Common.SQL_KEY,updateSql);
+            updateObj.put(Common.VALUES_KEY,insertArray);
+
+            logger.info("-----"+updateObj.toString());
+
+            updateFuture.complete(updateObj.toString());
+        });
+        //数据库更新操作
+        updateFuture.setHandler(updateHandler->{
+           String queryStr = updateFuture.result().toString();
+            vertx.eventBus().send(DataBaseOperationVerticle.class.getName(),queryStr,message->{
+                if (message.succeeded()){
+                    JsonObject respObj = new JsonObject(message.result().body().toString());
+                    logger.info("updateFuture:"+respObj.toString());
+                    if (respObj.getBoolean("isSuccess")){
+                        retJson.put("status",ReturnStatus.SC_OK);
+                        logger.info("updateFuture reply:"+retJson.toString());
+                        handler.reply(retJson.toString());
+                    }else {
+                        retJson.put("status",ReturnStatus.SC_FAIL);
+                        handler.reply(retJson.toString());
+                    }
+                }else {
+                    retJson.put("status",ReturnStatus.SC_FAIL);
+                    handler.reply(retJson.toString());
+                }
+            });
+        });
+        String selectSql = "select participant::jsonb from t_project where project_id = ?";
+        JsonArray selectValues = new JsonArray();
+        selectValues.add(projectId);
+        JsonObject selectObj = new JsonObject();
+        selectObj.put(Common.SQL_KEY,selectSql);
+        selectObj.put(Common.METHOD,Common.METHOD_SELECT);
+        selectObj.put(Common.VALUES_KEY,selectValues);
+
+        vertx.eventBus().send(DataBaseOperationVerticle.class.getName(),selectObj.toString(),message->{
+           if (message.succeeded()){
+               JsonObject respObj = new JsonObject(message.result().body().toString());
+               JsonObject dataObj = respObj.getJsonArray("data").getJsonObject(0);
+               logger.info("dataObj"+dataObj);
+               String dataStr = dataObj.getString("participant");
+               logger.info("dataStr"+dataStr);
+               if (dataStr == null || dataStr.equals("")){
+                   emptyFuture.complete();
+               }else {
+                   addFuture.complete(dataStr);
+               }
+           }else {
+               retJson.put("status",ReturnStatus.SC_FAIL);
+               handler.reply(retJson.toString());
+           }
+        });
+    }
+
+
 }

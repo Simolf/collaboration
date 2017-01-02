@@ -2,6 +2,7 @@ package com.caompus;
 
 import com.caompus.dataSourceVerticle.DataBaseOperationVerticle;
 import com.caompus.dataSourceVerticle.MemberOperateServiceVerticle;
+import com.caompus.dataSourceVerticle.MessageVerticle;
 import com.caompus.dataSourceVerticle.TokenCheckVerticle;
 import com.caompus.file.FileVerticle;
 import com.caompus.item.ItemVerticle;
@@ -37,6 +38,7 @@ public class Main {
         vertx.deployVerticle(UserInfoVerticle.class.getName());
         vertx.deployVerticle(TokenCheckVerticle.class.getName());
         vertx.deployVerticle(FileVerticle.class.getName());
+        vertx.deployVerticle(MessageVerticle.class.getName());
 
         //首页
         vertx.deployVerticle(IndexVerticle.class.getName());

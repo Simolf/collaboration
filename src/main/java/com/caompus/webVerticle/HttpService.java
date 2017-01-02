@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
 import java.util.*;
 
 /**
- * Created by credtitone on 2016/10/22.
+ * Created by chenxioaxin on 2016/10/22.
  */
 public class HttpService extends AbstractVerticle{
 
@@ -189,6 +189,12 @@ public class HttpService extends AbstractVerticle{
         }else if (request.uri().contains("getProjectById")){
             map.put("method","getProjectById");
             className = IndexVerticle.class.getName();
+        }else if (request.uri().contains("getFileList")){
+            map.put("method","getFileList");
+            className = FileVerticle.class.getName();
+        }else if (request.uri().contains("getMessageList")){
+            map.put("method","getMessageList");
+            className = MessageVerticle.class.getName();
         }
     }
 
@@ -210,6 +216,7 @@ public class HttpService extends AbstractVerticle{
             paramObj.put("projectId",projectId);
             paramObj.put("fileName",file.fileName());
             paramObj.put("filePath",file.uploadedFileName());
+            paramObj.put("method","savaFile");
             logger.info(paramObj.toString());
             vertx.eventBus().send(FileVerticle.class.getName(),paramObj.toString(),message->{
                 if (message.succeeded()){
