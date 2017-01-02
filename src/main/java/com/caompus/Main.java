@@ -3,9 +3,11 @@ package com.caompus;
 import com.caompus.dataSourceVerticle.DataBaseOperationVerticle;
 import com.caompus.dataSourceVerticle.MemberOperateServiceVerticle;
 import com.caompus.dataSourceVerticle.TokenCheckVerticle;
-import com.caompus.task.OperationVerticle;
-import com.caompus.task.taskVerticle;
+import com.caompus.file.FileVerticle;
+import com.caompus.item.ItemVerticle;
+import com.caompus.task.TaskVerticle;
 import com.caompus.task.TaskOperationVerticle;
+import com.caompus.item.IndexVerticle;
 import com.caompus.userVerticle.LoginVerticle;
 import com.caompus.userVerticle.UserInfoVerticle;
 import com.caompus.webVerticle.HttpService;
@@ -34,10 +36,15 @@ public class Main {
         vertx.deployVerticle(DataBaseOperationVerticle.class.getName(),deploymentOptions);
         vertx.deployVerticle(UserInfoVerticle.class.getName());
         vertx.deployVerticle(TokenCheckVerticle.class.getName());
+        vertx.deployVerticle(FileVerticle.class.getName());
+
+        //首页
+        vertx.deployVerticle(IndexVerticle.class.getName());
+        vertx.deployVerticle(ItemVerticle.class.getName());
 
         //项目详情页
-        vertx.deployVerticle(taskVerticle.class.getName());
-        vertx.deployVerticle(OperationVerticle.class.getName());
+        vertx.deployVerticle(TaskVerticle.class.getName());
         vertx.deployVerticle(TaskOperationVerticle.class.getName());
+
     }
 }

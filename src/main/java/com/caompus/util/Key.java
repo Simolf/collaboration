@@ -7,5 +7,5 @@ public class Key {
     public static final String TOKEN_MAP = "tokenMap";
     public static final String TIME_MAP = "timeMap";
     public static final String PERMISSION_MAP = "permissionMap";
-    public static final String IP_MAP = "IPMap";
+    public static final String MESSAGE_MAP = "messageMap";
 }

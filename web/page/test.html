@@ -5,9 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-<form method="get" action="127.0.0.1/login">
-    <input type="text" id="text" />
-    <input type="button" id="submit" value="submit"/>
-</form>
+    <form action="../uploads" method="post" enctype="multipart/form-data">
+        <input type="file" id="file" name="file"/>
+        <input type="text" name="projectId" value="1"/>
+        <input type="submit" value="提交">
+    </form>
 </body>
 </html>

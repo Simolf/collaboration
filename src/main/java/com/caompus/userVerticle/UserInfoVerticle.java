@@ -43,7 +43,7 @@ public class UserInfoVerticle extends AbstractVerticle {
                 }
             }else {
                 logger.error("==tokenCheckVerticle调用失败:=="+tokenHandler.cause().toString());
-                JsonObject retObj = ReturnStatus.getStatusObj("500");
+                JsonObject retObj = ReturnStatus.getStatusObj(ReturnStatus.innerErrorCode);
                 handler.reply(retObj.toString());
             }
         });
@@ -51,6 +51,10 @@ public class UserInfoVerticle extends AbstractVerticle {
 
     }
 
+    /**
+     * 个人信息
+     * @param handler
+     */
     private void handlePersonInfo(Message<Object> handler) {
         JsonObject paramObj = new JsonObject(handler.body().toString());
         String phone = paramObj.containsKey("phone")?paramObj.getValue("phone").toString():"";
@@ -66,8 +70,8 @@ public class UserInfoVerticle extends AbstractVerticle {
                 JsonObject restJson = new JsonObject(restString);
                 JsonObject retObj = new JsonObject();
                 if (!restJson.getJsonObject("data").isEmpty()){
-                    retObj.put("status","200");
-                    retObj.put("data",restJson.getJsonObject("data"));
+                    retObj.put("status",200);
+                    retObj.put("user",restJson.getJsonObject("data"));
                     logger.info("==userInfo return:=="+retObj.toString());
                 }else {
                     retObj.put("status","301");
@@ -77,4 +81,5 @@ public class UserInfoVerticle extends AbstractVerticle {
             }
         });
     }
+
 }

@@ -10,6 +10,7 @@ import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.LocalMap;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -41,6 +42,8 @@ public class LoginVerticle extends AbstractVerticle {
             handleLogout(handler);
         } else if ("register".equals(method)) {
             handleRegister(handler);
+        }else if ("isRegister".equals(method)){
+            isRegister(handler);
         }
     }
 
@@ -54,7 +57,7 @@ public class LoginVerticle extends AbstractVerticle {
         LocalMap<String, String> tokenMap = vertx.sharedData().getLocalMap(Key.TOKEN_MAP);//userPhone->token
         LocalMap<String, Long> timeMap = vertx.sharedData().getLocalMap(Key.TIME_MAP);    //token->time
         LocalMap<String, JsonObject> permissionMap = vertx.sharedData().getLocalMap(Key.PERMISSION_MAP);//token -> 权限
-        JsonObject ret = ReturnStatus.getStatusObj(ReturnStatus.typeOfTokenUnavailable);
+        JsonObject ret = ReturnStatus.getStatusObj(ReturnStatus.tokenUnavailableCode);
         ret.put("token", "");
 
         String param = handler.body().toString();
@@ -64,11 +67,11 @@ public class LoginVerticle extends AbstractVerticle {
         String uuid = paramJson.containsKey("uuid") ? paramJson.getString("uuid") : "";
 
         //登录
-        String userPhone = paramJson.containsKey("phone") ? paramJson.getValue("phone").toString() : "";        //帐号
+        String userPhone = paramJson.containsKey("userId") ? paramJson.getValue("userId").toString() : "";        //帐号
         String password = paramJson.containsKey("password") ? paramJson.getValue("password").toString() : "";  //密码
 
         if ("".equals(userPhone) || "".equals(password)) {
-            ret = ReturnStatus.getStatusObj(ReturnStatus.typeOfMissParameter);
+            ret = ReturnStatus.getStatusObj(ReturnStatus.missParameterCode);
             ret.put("token", "");
             logger.info(uuid + " " + ret);
             handler.reply(ret.toString());
@@ -100,7 +103,7 @@ public class LoginVerticle extends AbstractVerticle {
             });
 
             loginFuture.setHandler(futureHandler -> {
-                JsonObject finalRet = ReturnStatus.getStatusObj(ReturnStatus.typeOfTokenUnavailable);
+                JsonObject finalRet = ReturnStatus.getStatusObj(ReturnStatus.tokenUnavailableCode);
                 finalRet.put("token", "");
 
                 if (loginFuture.succeeded()) {
@@ -115,9 +118,10 @@ public class LoginVerticle extends AbstractVerticle {
                     if (!userInfoJson.isEmpty()) {
                         String userName = userInfoJson.containsKey("user_name") ? userInfoJson.getValue("user_name").toString() : "";
                         String phone = userInfoJson.containsKey("phone")?userInfoJson.getValue("phone").toString():"";
-                        finalRet = ReturnStatus.getStatusObj(ReturnStatus.typeOfSuccess);
-                        finalRet.put("userName", userName);
-                        finalRet.put("id",phone);
+                        finalRet = ReturnStatus.getStatusObj(ReturnStatus.successCode);
+//                        finalRet.put("userName", userName);
+//                        finalRet.put("id",phone);
+                        finalRet.put("user",returnJson.getJsonObject("data"));
                         finalRet.put("token", tokenUUID);
                         //判断token是否失效，未失效则继续使用
                         if (tokenMap.get(tokenKey) != null && timeMap.get(tokenMap.get(tokenKey)) != null) {
@@ -163,7 +167,7 @@ public class LoginVerticle extends AbstractVerticle {
             failFuture.setHandler(futureHandler -> {
                 String retString = "";
                 if (failFuture.failed()) {
-                    JsonObject finalRet = ReturnStatus.getStatusObj(ReturnStatus.typeOfTokenUnavailable);
+                    JsonObject finalRet = ReturnStatus.getStatusObj(ReturnStatus.tokenUnavailableCode);
                     finalRet.put("token", "");
                     retString = finalRet.toString();
                 } else {
@@ -214,11 +218,11 @@ public class LoginVerticle extends AbstractVerticle {
 
         JsonObject retJson = new JsonObject();
 
-        String phone = paramJson.containsKey("phone") ? paramJson.getValue("phone").toString() : "";
+        String userId = paramJson.containsKey("userId") ? paramJson.getValue("userId").toString() : "";
         String userName = paramJson.containsKey("userName") ? paramJson.getValue("userName").toString() : "";
         String password = paramJson.containsKey("password") ? paramJson.getValue("password").toString() : "";
 
-        if ("".equals(phone) || "".equals(userName) || "".equals(password)) {
+        if ("".equals(userId) || "".equals(userName) || "".equals(password)) {
             retJson = ReturnStatus.getStatusObj(ReturnStatus.missParameterCode);
             logger.info("参数为空" + paramJson);
             handler.reply(retJson.toString());
@@ -230,25 +234,46 @@ public class LoginVerticle extends AbstractVerticle {
         queryJson.put("param", paramJson.toString());
 
         String uuid = UUID.randomUUID().toString();
-        Future registerFuture = Future.future();
-        Future successFuture = Future.future();
-        Future failFuture = Future.future();
 
         DeliveryOptions options = new DeliveryOptions().setSendTimeout(10 * 1000);
 
         vertx.eventBus().send(MemberOperateServiceVerticle.class.getName(), queryJson.toString(), options, ar -> {
             if (ar.succeeded()){
-                registerFuture.complete(ar.result().body().toString());
+                handler.reply(ar.result().body().toString());
             }else {
                 String str = "注册数据库回调失败" + ar.cause();
-                failFuture.fail(str);
                 logger.error(uuid + " " + str);
+                handler.reply(new JsonObject().put("status",ReturnStatus.SC_FAIL));
             }
         });
-        registerFuture.setHandler(registerHandler->{
 
+    }
+
+    /**
+     * 判断用户是否已注册 userId
+     * @param handler
+     */
+    public void isRegister(Message<Object> handler){
+        JsonObject retJson = new JsonObject();
+        JsonObject paramObj = new JsonObject(handler.body().toString());
+        String userId = paramObj.containsKey("userId")?paramObj.getValue("userId").toString():"";
+
+        if (StringUtils.isEmpty(userId)){
+            retJson.put("status",ReturnStatus.SC_FAIL);
+            logger.info("isRegister 参数为空");
+            handler.reply(retJson.toString());
+            return;
+        }
+
+        vertx.eventBus().send(MemberOperateServiceVerticle.class.getName(), paramObj.toString(),message->{
+            if (message.succeeded()){
+                handler.reply(message.result().body().toString());
+            }else {
+                retJson.put("status",ReturnStatus.SC_FAIL);
+                logger.error("isRegister response error"+message.cause().getMessage());
+                handler.reply(retJson.toString());
+            }
         });
-
     }
 
     /**

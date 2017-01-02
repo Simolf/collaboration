@@ -69,13 +69,19 @@ public class DataBaseOperationVerticle extends AbstractVerticle {
                SQLConnection connection = connectionHandler.result();
                connection.updateWithParams(sql,values,insertHandler->{
                   if (insertHandler.succeeded()){
-                      retJson.put("data","操作成功");
+                      retJson.put("isSuccess",true);
                       logger.info(retJson.toString());
                       handler.reply(retJson.toString());
                   }else {
-                      fail(handler,insertHandler.cause().getCause().toString());
+                      logger.error("数据库操作失败："+insertHandler.cause().getMessage());
+                      retJson.put("isSuccess",false);
+                      handler.reply(retJson.toString());
                   }
                }).close();
+           }else {
+               logger.error("数据库连接失败:"+connectionHandler.cause().getMessage());
+               retJson.put("isSuccess",false);
+               handler.reply(retJson.toString());
            }
         });
     }
@@ -98,14 +104,15 @@ public class DataBaseOperationVerticle extends AbstractVerticle {
                         ResultSet resultSet = queryHandler.result();
                         List<JsonObject> list = resultSet.getRows();
                         retJson.put("data", list);
-                        logger.info("database retJson:"+retJson.toString());
+                        logger.error("database retJson:"+retJson.toString());
                         handler.reply(retJson.toString());
                     } else {
-                        fail(handler, queryHandler.cause().getCause().toString());
+                        logger.info("数据库操作失败"+queryHandler.cause().getMessage());
+                        retJson.put("data",new JsonArray());
                     }
                 }).close();
             }else {
-                fail(handler,connectionHandler.cause().getCause().toString());
+                logger.error("数据库连接失败："+connectionHandler.cause().getMessage());
             }
         });
     }

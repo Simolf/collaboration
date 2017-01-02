@@ -26,10 +26,10 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.7.4" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.7.4" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.7.0" level="project" />
+    <orderEntry type="library" name="Maven: io.vertx:vertx-web:3.3.0" level="project" />
+    <orderEntry type="library" name="Maven: io.vertx:vertx-auth-common:3.3.0" level="project" />
     <orderEntry type="library" name="Maven: io.vertx:vertx-lang-js:3.3.0" level="project" />
     <orderEntry type="library" name="Maven: io.vertx:vertx-shell:3.3.0" level="project" />
-    <orderEntry type="library" name="Maven: io.vertx:vertx-auth-common:3.3.0" level="project" />
-    <orderEntry type="library" name="Maven: io.vertx:vertx-web:3.3.0" level="project" />
     <orderEntry type="library" name="Maven: io.termd:termd-core:1.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.sshd:sshd-core:1.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.postgresql:postgresql:9.4.1208" level="project" />
