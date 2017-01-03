@@ -231,7 +231,7 @@ public class LoginVerticle extends AbstractVerticle {
 
         JsonObject queryJson = new JsonObject();
         queryJson.put("method", "register");
-        queryJson.put("param", paramJson.toString());
+        queryJson.put("param", paramJson);
 
         String uuid = UUID.randomUUID().toString();
 

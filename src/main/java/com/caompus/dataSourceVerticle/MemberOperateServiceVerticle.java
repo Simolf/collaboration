@@ -224,7 +224,7 @@ public class MemberOperateServiceVerticle extends AbstractVerticle{
         JsonObject paramObj = new JsonObject(handler.body().toString());
         String userId = paramObj.getValue("userId").toString();
 
-        String sql = "select user_id,userName from t_user_base_info where user_id=?";
+        String sql = "select phone,user_name from t_user_base_info where phone=?";
         JsonArray values = new JsonArray();
         values.add(userId);
         JsonObject queryObj = new JsonObject();

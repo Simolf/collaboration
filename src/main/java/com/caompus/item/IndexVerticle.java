@@ -35,6 +35,8 @@ public class IndexVerticle extends AbstractVerticle {
             deleteProject(handler);
         }else if ("getProjectById".equals(method)){
             getProjectById(handler);
+        }else if ("updateProject".equals(method)){
+            updateProject(handler);
         }
     }
 
@@ -161,6 +163,34 @@ public class IndexVerticle extends AbstractVerticle {
 
     }
 
+    /**
+     * 修改项目参数
+     * @param handler
+     */
+    private void updateProject(Message<Object> handler){
+        JsonObject retJson = new JsonObject();
+
+        JsonObject paramObj = new JsonObject(handler.body().toString());
+        String projectId = paramObj.containsKey("projectId")?paramObj.getValue("projectId").toString():"";
+        String projectName = paramObj.containsKey("projectName")?paramObj.getValue("projectName").toString():"";
+        String brief = paramObj.containsKey("brief")?paramObj.getValue("brief").toString():"";
+
+        if (StringUtils.isEmpty(projectId) || StringUtils.isEmpty(projectName) || StringUtils.isEmpty(brief)){
+            retJson.put("status",400);
+            logger.error("updateProject 参数为空");
+            handler.reply(retJson.toString());
+            return;
+        }
+
+        vertx.eventBus().send(ItemVerticle.class.getName(),paramObj.toString(),message->{
+            if (message.succeeded()){
+                handler.reply(message.result().body().toString());
+            }else {
+                retJson.put("status",400);
+                handler.reply(retJson.toString());
+            }
+        });
+    }
 
 
 }

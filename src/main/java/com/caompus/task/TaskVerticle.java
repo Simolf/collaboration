@@ -10,6 +10,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.LocalMap;
 import org.apache.commons.lang3.StringUtils;
@@ -85,7 +86,7 @@ public class TaskVerticle extends AbstractVerticle {
         vertx.eventBus().send(MemberOperateServiceVerticle.class.getName(), userReqObj.toString(), userInfoFuture.completer());
 
         //获取项目信息
-        JsonObject itemReqObj = new JsonObject().put("method", "getItemDetail").put("projectId", projectId);
+        JsonObject itemReqObj = new JsonObject().put("method", "getProjectById").put("projectId", projectId);
         vertx.eventBus().send(ItemVerticle.class.getName(), itemReqObj.toString(), itemInfoFuture.completer());
 
         //获取用户当前项目任务信息
@@ -101,7 +102,10 @@ public class TaskVerticle extends AbstractVerticle {
                 retJson.put("user", userResObj.getJsonObject(Common.USER_RET_KEY));
 
                 JsonObject itemResJson = new JsonObject(((Message<Object>) itemInfoFuture.result()).body().toString());
-                retJson.put("project", itemResJson.getJsonObject(Common.PROJECT_RET_KEY));
+                JsonObject obj = itemResJson.getJsonObject(Common.PROJECT_RET_KEY);
+                JsonArray partArray = new JsonArray(obj.getString("participant"));
+                obj.put("participant",partArray);
+                retJson.put("project", obj);
 
                 JsonObject taskResJson = new JsonObject(((Message<Object>) taskInfoFuture.result()).body().toString());
                 retJson.put("task", taskResJson.getJsonArray(Common.TASK_RET_KEY));

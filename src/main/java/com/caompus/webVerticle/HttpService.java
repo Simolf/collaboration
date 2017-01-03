@@ -195,6 +195,9 @@ public class HttpService extends AbstractVerticle{
         }else if (request.uri().contains("getMessageList")){
             map.put("method","getMessageList");
             className = MessageVerticle.class.getName();
+        }else if (request.uri().contains("updateProject")){
+            map.put("method","updateProject");
+            className = IndexVerticle.class.getName();
         }
     }
 

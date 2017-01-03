@@ -38,6 +38,8 @@ public class ItemVerticle extends AbstractVerticle{
             createProject(handler);
         }else if ("deleteProject".equals(method)){
             deleteProject(handler);
+        }else if ("updateProject".equals(method)){
+            updateProject(handler);
         }
     }
 
@@ -245,6 +247,44 @@ public class ItemVerticle extends AbstractVerticle{
                retJson.put("status",ReturnStatus.SC_FAIL);
                handler.reply(retJson.toString());
            }
+        });
+
+    }
+
+    private void updateProject(Message<Object> handler){
+        JsonObject retJson = new JsonObject();
+
+        JsonObject paramObj = new JsonObject(handler.body().toString());
+        int projectId = Integer.parseInt(paramObj.getValue("projectId").toString());
+        String projectName = paramObj.getValue("projectName").toString();
+        String brief = paramObj.getValue("brief").toString();
+
+        String sql = "update t_project set project_name = ? , brief = ? " +
+                "where project_id = ?";
+        JsonArray values = new JsonArray();
+        values.add(projectName);
+        values.add(brief);
+        values.add(projectId);
+        JsonObject queryObj = new JsonObject();
+        queryObj.put("method","update");
+        queryObj.put("values",values);
+        queryObj.put("sqlString",sql);
+
+        logger.info("updateProject queryObj"+queryObj.toString());
+        vertx.eventBus().send(DataBaseOperationVerticle.class.getName(),queryObj.toString(),message->{
+            if (message.succeeded()){
+                JsonObject respObj = new JsonObject(message.result().body().toString());
+                if (respObj.getBoolean("isSuccess")){
+                    retJson.put("status",200);
+                }else {
+                    retJson.put("status",400);
+                }
+                handler.reply(retJson.toString());
+            }else {
+                retJson.put("status",400);
+                logger.error("updateProject error"+message.cause().getMessage());
+                handler.reply(retJson.toString());
+            }
         });
 
     }

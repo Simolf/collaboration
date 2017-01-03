@@ -72,11 +72,11 @@ public class TaskOperationVerticle extends AbstractVerticle {
             failFuture.complete();
         }
 
-        String sql = "select task_id \"taskId\",project_id \"projectId\", create_time \"createTime\"," +
+        String sql = "select task_id \"taskId\",project_id \"projectId\",task_content \"taskContent\",creator \"creator\", create_time \"createTime\"," +
                 "status,participant_id \"participantId\",participant_name \"participantName\" " +
-                "from t_task_detail where project_id = ? and participant_id = ?";
+                "from t_task_detail where project_id = ? and (participant_id = ? or creator_id = ?)";
         JsonObject queryObj = new JsonObject();
-        JsonArray values = new JsonArray().add(projectId).add(userId);
+        JsonArray values = new JsonArray().add(projectId).add(userId).add(userId);
         queryObj.put("method","select");
         queryObj.put("sqlString",sql);
         queryObj.put("values",values);
@@ -111,7 +111,7 @@ public class TaskOperationVerticle extends AbstractVerticle {
         JsonObject paramObj = new JsonObject(hadler.body().toString());
 
         int taskId = Integer.parseInt(paramObj.getString("taskId"));
-        String sql = "select task_id \"taskId\",project_id \"projectId\", create_time \"createTime\"," +
+        String sql = "select task_id \"taskId\",project_id \"projectId\",task_content \"taskContent\",creator \"creator\", create_time \"createTime\"," +
                 "status,participant_id \"participantId\",participant_name \"participantName\" " +
                 "from t_task_detail where task_id = ?";
         JsonArray values = new JsonArray().add(taskId);
@@ -143,7 +143,8 @@ public class TaskOperationVerticle extends AbstractVerticle {
      */
     private void createTask(Message<Object> handler){
         JsonObject paramObj = new JsonObject(handler.body().toString());
-        String userId = paramObj.getValue("phone").toString();
+        String userId = paramObj.getValue("userId").toString();
+        String userName = paramObj.getValue("userName").toString();
         int projectId =Integer.parseInt(paramObj.getString("projectId"));
         String taskContent = paramObj.getString("taskContent");
         String participantId =paramObj.getString("participantId");
@@ -152,13 +153,15 @@ public class TaskOperationVerticle extends AbstractVerticle {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         String sql = "insert into t_task_detail(project_id,create_time,participant_id," +
-                "participant_name,task_content,status) values(?,?,?,?,?,?)";
+                "participant_name,task_content,creator_id,creator,status) values(?,?,?,?,?,?,?,?)";
         JsonArray values = new JsonArray();
         values.add(projectId);
         values.add(format.format(new Date()));
         values.add(participantId);
         values.add(participantName);
         values.add(taskContent);
+        values.add(userId);
+        values.add(userName);
         values.add(1);
         JsonObject queryObj = new JsonObject();
         queryObj.put(Common.METHOD,Common.METHOD_INSERT);

@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <mainClass>Main</mainClass>
+        <mainClass>com.caompus.Main</mainClass>
         <vertxVersion>3.3.0</vertxVersion>
 
         <!-- 文件拷贝时的编码 -->
