@@ -153,7 +153,8 @@ public class TaskOperationVerticle extends AbstractVerticle {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         String sql = "insert into t_task_detail(project_id,create_time,participant_id," +
-                "participant_name,task_content,creator_id,creator,status) values(?,?,?,?,?,?,?,?)";
+                "participant_name,task_content,creator_id,creator,status) values(?,?,?,?,?,?,?,?)" +
+                " returning task_id";
         JsonArray values = new JsonArray();
         values.add(projectId);
         values.add(format.format(new Date()));
@@ -164,7 +165,7 @@ public class TaskOperationVerticle extends AbstractVerticle {
         values.add(userName);
         values.add(1);
         JsonObject queryObj = new JsonObject();
-        queryObj.put(Common.METHOD,Common.METHOD_INSERT);
+        queryObj.put(Common.METHOD,Common.METHOD_SELECT);
         queryObj.put(Common.VALUES_KEY,values);
         queryObj.put(Common.SQL_KEY,sql);
 
@@ -172,7 +173,9 @@ public class TaskOperationVerticle extends AbstractVerticle {
             JsonObject retJson = new JsonObject();
            if (message.succeeded()){
                JsonObject respObj = new JsonObject(message.result().body().toString());
-               if (respObj.getBoolean("isSuccess")){
+               if (!respObj.getJsonArray("data").isEmpty()){
+                   int taskId = respObj.getJsonArray("data").getJsonObject(0).getInteger("task_id");
+                   retJson.put("taskId",taskId);
                    retJson.put("status",ReturnStatus.SC_OK);
                    logger.info("create task response"+retJson.toString());
                }else {
@@ -244,13 +247,13 @@ public class TaskOperationVerticle extends AbstractVerticle {
         vertx.eventBus().send(DataBaseOperationVerticle.class.getName(),queryObj.toString(),message->{
             JsonObject retJson = new JsonObject();
            if (message.succeeded()){
-               JsonObject respObj = new JsonObject(message.result().toString());
+               JsonObject respObj = new JsonObject(message.result().body().toString());
                if (respObj.getBoolean("isSuccess")){
                    retJson.put("status",ReturnStatus.SC_OK);
                }else {
                    retJson.put("status",ReturnStatus.SC_FAIL);
                }
-               handler.reply(handler);
+               handler.reply(retJson.toString());
            }else {
                retJson.put("status",ReturnStatus.SC_FAIL);
                handler.reply(retJson.toString());

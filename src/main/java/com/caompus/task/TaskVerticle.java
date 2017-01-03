@@ -146,9 +146,11 @@ public class TaskVerticle extends AbstractVerticle {
             return;
         }
 
+        Future messFutute = Future.future();
         vertx.eventBus().send(TaskOperationVerticle.class.getName(),paramObj.toString(),message->{
             if (message.succeeded()){
                 logger.info("create task message"+message.result().body().toString());
+                messFutute.complete();
                 JsonObject ret = new JsonObject(message.result().body().toString());
                 handler.reply(ret.toString());
             }else {
@@ -157,6 +159,21 @@ public class TaskVerticle extends AbstractVerticle {
                 handler.reply(retJson.toString());
             }
         });
+
+        messFutute.setHandler(messHandler->{
+            JsonObject messageObj = new JsonObject();
+            messageObj.put("userId",userId);
+            messageObj.put("participantId",participantId);
+            messageObj.put("type",0);
+            messageObj.put("content","被分配任务 "+taskContent);
+            messageObj.put("method","saveMessage");
+            vertx.eventBus().send(MessageVerticle.class.getName(),messageObj.toString(),message->{
+                if (message.succeeded()){
+                    logger.info("chenggong");
+                }
+            });
+        });
+
     }
 
     /**

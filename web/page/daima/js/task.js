@@ -189,7 +189,7 @@ $(function(){
     }
     
     // 创建任务
-    $addTaskContent.on('click','button',function(){
+   /* $addTaskContent.on('click','button',function(){
     	if($(this).siblings("textarea").val() == ""){
     		alert("请输入任务内容！");
     	}else{
@@ -199,8 +199,8 @@ $(function(){
     		    .hide();
     		addTask(this);
     	}
-    });
-    function addTask(that){
+    });*/
+    function addTask(that,id){
     	var text = $(that).siblings("textarea").val(),
     	    $participants = $(that).siblings(".participant").find(".all-members").children("li"),
     	    $appendUl = $(that).parents(".add-task-content").siblings(".tasks");
@@ -208,6 +208,7 @@ $(function(){
         var $newSpan = $("<span class='task-content'></span>"),
             $newLi = $("<li></li>");
         $newSpan.text(text);
+        $newLi.attr("data-taskId",id);
         $newLi.append($newSpan)
               .appendTo($appendUl);
     }
@@ -325,7 +326,7 @@ $(function(){
 
 
     $(document).on('click','.add-task-content .add > span',function(e){
-        console.log(e.target);
+        //console.log(e.target);
         addMembersInit(e.target);
         $(e.target).siblings(".add-members").show();
     })
@@ -337,23 +338,29 @@ $(function(){
             $(".add-members").hide();
         }
         if(e.target === $(".create-task")[0]){
-            var taskContent = $(".content").text();
-            var participantId = $(".mm").attr("data-id");
-             console.log(participantId);
+            var taskContent = $("#project-task").find(".content").val();
+            var participantId = $("#project-task").find(".mm").attr("data-id");
+            var participantName = $("#project-task").find(".participant-name").text();
             //点击添加任务
-            // $.ajax({
-            //     url: localhost+"collaboration/createTask",
-            //     type: "POST",
-            //     data: {
-            //         userId: userId,
-            //         projectId: proId,
-            //         taskContent: taskContent,
-            //         participantId: participantId
-            //     }
-            // })
-            // .done(function(data){
-            //     console.log(data);
-            // });
+            $.ajax({
+                url: localhost+"collaboration/createTask",
+                type: "POST",
+                data: {
+                    userId: userId,
+                    userName: userName,
+                    projectId: proId,
+                    taskContent: taskContent,
+                    participantId: participantId,
+                    participantName: participantName
+                }
+            })
+            .done(function(data){
+                data = JSON.parse(data);
+                console.log(data);
+                if(data.status === 200){
+                    addTask(e.target,data.taskId);
+                }
+            });
         }
     })
  

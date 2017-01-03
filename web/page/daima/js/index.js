@@ -32,6 +32,9 @@ $(function(){
 	$headNav.on('click','li',function(){
 		$(this).addClass('active')
 		       .siblings().removeClass('active');
+		if($(this).children("a").text() === "通知"){
+			window.location.href = "inform.html";
+		}
 		return false;
 	});
 
@@ -59,6 +62,10 @@ $(function(){
 			                         .load("task.html");
 			$.getScript('../js/render.js');
 			$.getScript('../js/task.js');
+		}else if($(e.target).text() === "文件"){
+			$("#project-tab-content").empty()
+			                         .load("file.html");
+			$.getScript('../js/file.js');
 		}
 	});
 	$projectNavUl.on('click','li',function(){

@@ -118,7 +118,7 @@ public class MessageVerticle extends AbstractVerticle {
     private void getMessageList(Message<Object> handler){
         JsonObject retJson = new JsonObject();
 
-        JsonObject paramObj = new JsonObject();
+        JsonObject paramObj = new JsonObject(handler.body().toString());
         String userId = paramObj.getString("userId");
 
         String sql = "select content,sender,target,type,create_time \"createTime\" " +

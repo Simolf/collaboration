@@ -43,7 +43,7 @@ public class HttpService extends AbstractVerticle{
         Router router = Router.router(vertx);
 
         //静态页面访问模板StaticHandler
-        router.route("/page/*").handler(StaticHandler.create("web/page"));
+        router.route("/page/*").handler(StaticHandler.create("page"));
 
         //请求体访问模板BodyHandler
         router.route().handler(BodyHandler.create());
