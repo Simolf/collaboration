@@ -1,0 +1,131 @@
+*{ 
+	margin: 0; 
+	padding: 0;
+}
+
+html, body{
+	width:100%; 
+	/*height:100%;*/
+}
+
+body{
+	min-width: 1024px;
+	font-family: "Microsoft Yahei", 微软雅黑;
+	background: url(../img/x.jpg) no-repeat;
+	background-size: cover;
+	/*overflow: hidden;*/
+}
+
+a,
+a:link,
+a:visited,
+a:hover,
+a:active{
+	text-decoration: none;
+}
+
+.content{
+	width: 100%;
+	height: 100%;
+}
+
+.registerBox{
+	width: 46%;  
+	height: 300px;
+	margin: 180px auto 50px;
+	text-align: center;
+}
+
+.registerBox h1{
+	height: 70px;
+    line-height: 50px;
+    font-weight: bold;
+    /*font-family: Helvetica;*/
+}
+
+.registerForm{
+	width: 100%;
+	margin: 0 auto;
+	font-size: 16px;
+	line-height: 45px;
+}
+
+.inputBox{
+	width: 260px;
+	height: 60px;
+	text-align: left;  
+	margin: 0 auto;
+	position: relative;
+}
+
+.inputBox .getTip{
+	width: 250px;
+	height: 34px;
+	background-color: #FFF;  
+	color: #555;
+	text-align: left;
+}
+
+.inputBox .insertTip{
+	width: 250px;
+	height: 34px;
+	background-color: #eed5d5; /* #fbe0e0; #fff4f4*/
+	color: #F74555;
+	text-align: left;
+}
+
+.inputBox .litTip{
+	width: 100px;
+	height: 34px;
+	line-height: 40px;
+	color: #F74555;
+	font-size: 12px;
+	position: absolute;
+    top: 28px;   
+    left: 194px; 
+    background: url(../img/litTip.png) no-repeat;
+    background-size: 100%;
+}
+
+.inputBox .litTip1{
+	width: 116px;
+	height: 34px;
+	line-height: 46px;
+	color: #F74555;
+	font-size: 12px;
+	position: absolute;
+    top: 28px;   
+    left: 194px; 
+    background: url(../img/litTip1.png) no-repeat;
+    background-size: 100%;
+}
+
+.inputBox p{
+	color: #CCC;
+	font-size: 14px;
+	text-align: center;
+}
+
+.bhref{
+	color: #0c60a7;
+}
+
+.inputBox .registerBtn{
+	background-color: #ff8744; /*#1C86EE;  蓝色*/
+	color: #FFF;
+}
+
+.inputBox .registerBtn:hover{
+	background: #ff8744 url(../img/login.png) no-repeat 65%;
+	padding-right: 50px;
+	/*text-align: left;*/
+	color: #FFF;
+}
+
+.ishidden{
+	display: none;
+}
+
+.show{
+	display: block;
+}

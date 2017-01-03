@@ -1,0 +1,76 @@
+<ul id="project-task">
+    <script type="text/template" id="tpl">
+        <li class="wait-to-do">
+           <article>
+               <h1>待处理</h1>
+               <ul class="tasks task1">
+                    {@each task as item}
+                        {@if item.status === 1}
+                            <li data-taskId=${item.taskId}>
+                               <span class="task-content">${item.taskContent}</span>
+                           </li> 
+                        {@/if}
+                    {@/each}
+               </ul>
+               {@if user.id === project.creatorId }
+               <p class="add-task"><a href="#">+ 添加任务</a></p>
+               <!-- 添加任务 -->
+               <div class="add-task-content">
+                   <textarea placeholder="任务内容" class="content"></textarea>
+                   <section class="creator">
+                       <span class="title">创建者</span>
+                       <span class="creator-name members-name">${project.creator}</span>
+                   </section>
+                   <section class="participant">
+                       <span class="title">参与者</span>
+                       <ul>
+                           <li data-id="${project.creatorId}" class="mm"><span class="members-name creator-name">${project.creator}</span></li>
+                           <li class="add">
+                               <span>+</span>
+                               <div class="add-members">
+                                   <ul class="all-members">
+                                       <li data-id="0">所有成员</li>
+                                       <li data-id="${project.creatorId}">${project.creator}</li>
+                                       {@each project.participant as item}
+                                       <li data-p="pp" data-id="${item.id}">${item.name}</li>
+                                       {@/each}
+                                   </ul>
+                               </div>
+                           </li>
+                       </ul>
+                   </section>
+                   <button class="create-task">创建</button>
+               </div>
+               {@/if}
+           </article>
+       </li>
+       <li class="is-doing">
+           <article>
+               <h1>进行中</h1>
+               <ul class="tasks task2">
+                    {@each task as item}
+                        {@if item.status === 2}
+                            <li data-taskId=${item.taskId}>
+                               <span class="task-content">${item.taskContent}</span>
+                           </li> 
+                        {@/if}
+                    {@/each}
+               </ul>
+           </article>
+       </li>
+       <li class="have-finished">
+           <article>
+               <h1>已完成</h1>
+               <ul class="tasks task3">
+                   {@each task as item}
+                        {@if item.status === 3}
+                            <li data-taskId=${item.taskId}>
+                               <span class="task-content">${item.taskContent}</span>
+                           </li> 
+                        {@/if}
+                    {@/each}
+               </ul>
+           </article>
+       </li>
+    </script>
+</ul>

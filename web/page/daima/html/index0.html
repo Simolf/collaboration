@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/index0.css">
+    <link rel="stylesheet" href="../css/jquery-ui.min.css">
+</head>
+<body>
+    <div class="hidebg"></div>
+    <div class="hidebg1"></div>
+    
+    <div id="project">
+        <header id="myHeader">
+            <a href="#" class="logo"><img src="../img/logo.png"></a>
+            <ul class="header-nav">
+                <li class="active"><a href="#">项目</a></li>
+                <li><a href="#">我的</a></li>
+                <li><a href="#">通知</a></li>
+            </ul>
+            <section class="install">
+                <a href="" class="user-name">用户名</a>
+                <ul class="install-nav">
+                    <li><a href="#">账号设置</a></li>
+                    <li><a href="#">退出登录</a></li>
+                </ul>
+            </section>
+            <a href="#" class="search"></a>
+            <input type="text" class="search-input" placeholder="搜索">
+        </header>   
+
+        <main>
+           <div id="content">
+                <div class="setting">
+                    <img src="../img/netOn.png" alt="图标模式"><img src="../img/list.png" alt="列表模式">
+                </div>
+                <div class="allproject">
+                    <span class="title">所有项目</span><hr>
+                    <ul class="prolist">
+                        <script type="text/template" id="tpl">
+                            {@each project as item}
+                            <li data-taskId="${item.projectId}" class="task_li">
+                                <div class="pro">
+                                    <h3 class="proname">${item.name}</h3>
+                                    <img src="../img/set.png" class="setUp">
+                                    <p class="hide">${item.brief}</p>
+                                </div>
+                            </li>
+                            {@/each}
+                        </script>
+                        <li>
+                            <div class="newpro">
+                                <div></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+           </div>
+        </main>
+    </div>
+
+    <!-- 创建项目弹出框 -->
+    <div class="popwindow hide">
+        <h4>创建项目</h4><button class="closetip"></button>
+        <hr>
+        <img src="../img/pop.png">
+        <form name="proform" id="proform" method="post" action="#">
+            <input type="text" id="proname" placeholder="项目名称">
+            <input type="button" class="btn" name="confirm" id="confirm" value="完成并创建">
+        </form>
+    </div>
+    
+    <!-- 项目设置 -->
+    <div class="popsetting hide">
+        <h3>项目设置</h3><button class="closetip"></button>
+        <hr>
+        <form name="setform" id="setform" method="post" action="#">
+            <span class="pro_name">项目名称</span>
+            <input type="text" name="setproname" id="setproname" value="">
+            <span class="pro_brief">项目简介</span>
+            <textarea name="setprosum" id="setprosum" cols="50" rows="3" placeholder="介绍一下这个项目"></textarea>
+           <!--  <span>项目操作</span>
+            <input type="button" name="delpro" id="delpro" value="删除">  -->
+            <hr>
+            <input type="button" name="delpro" id="delpro" value="删除项目"><input type="button" name="save" id="save" value="保存设置">
+        </form>
+    </div>
+
+    <!-- 删除项目 -->
+     <div class="popdelete hide">
+        <h4>删除项目</h4><button class="closetip"></button>
+        <hr>
+        <p>一旦你删除了项目，所有与项目有关的信息将会被永久删除。这是一个不可恢复的操作，请谨慎对待！</p>
+        <form name="delform" id="delform" method="post" action="#">
+            <input type="button" name="del" id="del" value="删除项目">
+        </form>
+    </div>
+
+    <!-- 删除成功提示 -->
+    <div class="poptip hide">
+        <img src="../img/success.png"> 
+        <span>已成功删除项目！</span>
+        <button class="closetip"></button>
+    </div>
+
+
+<script src="../js/jquery-3.1.0.min.js"></script>
+<script src="../js/index0.js"></script>
+<script src="../js/juicer-min.js"></script>
+</body>
+</html>

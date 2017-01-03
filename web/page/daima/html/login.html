@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<title>登录 - OA 账号</title>
+		<!-- <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">   -->
+		<link rel="stylesheet" type="text/css" href="../css/bootstrapv3.37.min.css"> 
+		<link rel="stylesheet" type="text/css" href="../css/login.css">
+	</head>
+	<body>
+		<div class="content">
+			<div class="loginBox">
+				<h1>Office Automation</h1>
+				<form id="loginForm" action="#" method="post">
+					<div class="inputBox ishidden">
+						<p class="tip">该帐号已经存在，请直接登录！</p>
+					</div>
+					<div class="inputBox">
+						<input type="text" class="form-control" name="userPhone" id="userPhone" placeholder="手机号" style="width:250px;"/>
+					</div>
+					<div class="inputBox">
+						<input type="password" class="form-control" name="password" id="password" placeholder="密码" style="width:250px;"/>
+						<a href="#">忘记密码？</a>
+					</div>
+					<div class="inputBox ishidden">
+						<p class="insertTip form-control">账号不存在！</p>
+					</div>
+					<div class="inputBox">
+						<button type="submit" id="loginBtn" class="btn loginBtn" style="width:250px;">登&nbsp;&nbsp;&nbsp;录</button>
+					</div>
+				</form>
+				<hr>
+				<p>还没有帐号？&nbsp;&nbsp;<a class="ahref" href="register.html">注册新账号</a></p>
+			</div>
+		</div>
+		<script src="../js/jquery-3.1.0.min.js"></script>
+		<script src="../js/login.js"></script>
+	</body>
+</html>

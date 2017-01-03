@@ -1,0 +1,106 @@
+*{ 
+	margin: 0; 
+	padding: 0;
+}
+
+html, body{
+	width:100%; 
+	/*height:100%;*/
+}
+
+body{
+	min-width: 1024px;
+	font-family: "Microsoft Yahei", 微软雅黑;
+	background: url(../img/x.jpg) no-repeat;
+	background-size: cover;
+	overflow: auto;
+}
+
+.content{
+	width: 100%;
+	height: 100%;
+}
+
+.loginBox{
+	width: 46%;  
+	height: 300px;
+	margin: 180px auto 80px;     /*80px*/ 
+	text-align: center;
+}
+
+.loginBox h1{
+	height: 70px;
+    line-height: 50px;
+    font-weight: bold;
+    /*font-family: Helvetica;	 /*英文字体标题*/  
+}
+
+#loginForm{
+	width: 100%;  
+	margin: 0 auto;
+	font-size: 16px;
+	line-height: 45px;
+}
+
+.inputBox{
+	width: 260px;
+	height: 60px;
+	text-align: left;
+	margin: 0 auto;
+}
+
+.inputBox a{
+	text-decoration: none;
+	color: #CCC;
+	font-size: 14px;
+	top: -40px;
+    left: 170px;
+    position: relative
+}
+
+.inputBox .loginBtn{
+	background-color: #ff8744; /*#1C86EE;  蓝色*/
+	color: #FFF;
+}
+
+.inputBox .loginBtn:hover{
+	background: #ff8744 url(../img/login.png) no-repeat 65%;
+	padding-right: 50px;
+	/*text-align: left;*/
+	color: #FFF;
+}
+
+.inputBox .tip{
+	width: 250px;
+	height: 34px;
+	/*background-color: #eed5d5; */
+	color: #FFF;
+	font-size: 16px;
+	text-align: center;
+}
+
+.inputBox .insertTip{
+	width: 250px;
+	height: 34px;
+	background-color: #eed5d5; /* #fbe0e0; #fff4f4*/
+	color: #F74555;
+	text-align: left;
+}
+
+p{
+	color: #CCC;
+	font-size: 14px;
+}
+
+p .ahref{
+	text-decoration: none;
+	color: #0c60a7;
+}
+
+.ishidden{
+	display: none;
+}
+
+.show{
+	display: block;
+}

@@ -1,0 +1,633 @@
+*{
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	color: #383838;
+}
+ul{
+	list-style: none;
+}
+a,
+a:link,
+a:visited,
+a:hover,
+a:active{
+	text-decoration: none;
+	color: #383838;
+}
+body{
+	min-width: 1024px;
+	font-family: "Helvetica Neue", "PingFang SC", "Microsoft Yahei", 微软雅黑, STXihei, 华文细黑, sans-serif;
+	font-size: 16px;
+	background: #EEE;
+}
+#myHeader{
+	width: 100%;
+	height: 55px;
+	line-height: 55px;
+	background: #fff;
+	border-bottom: 1px solid #cfcfcf;
+	position: relative;
+}
+#myHeader a{
+	display: inline-block;
+}
+#myHeader .logo{
+	width: 150px;
+	height: 100%;
+	float: left;
+	margin: 0 2%;
+}
+#myHeader .logo > img{
+	max-width: 100%;
+	height: 60%;
+    margin-top: 11px;
+}
+#myHeader .header-nav{
+	width: 25%;
+	height: 100%;
+	float: left;
+	overflow: hidden;
+}
+#myHeader .header-nav > li{
+	width: 33.3%;
+	height: 100%;
+	float: left;
+	text-align: center;
+}
+#myHeader .header-nav > li > a,
+#myHeader .install a{
+	width: 100%;
+	height: 100%;
+}
+#myHeader .header-nav > li > a:hover{
+	color: #3DA8F5;
+}
+#myHeader .header-nav > li.active a{
+	background: #F7F7F7;
+	color: #3DA8F5;
+}
+#myHeader .install{
+	width: 10%;
+	height: 100%;
+	float: right;
+	text-align: center;
+	position: relative;
+	border-left: 1px solid #cfcfcf;
+}
+#myHeader .install > a:hover,
+#myHeader .search:hover{
+	color: #3DA8F5;
+}
+#myHeader .install > a:hover + .install-nav,
+#myHeader .install-nav:hover{
+	display: block;
+}
+#myHeader .install-nav{
+	width: 100%;
+	position: absolute;
+	top: 100%;
+	display: none;
+	z-index: 2;
+}
+#myHeader .install-nav > li{
+	width: 100%;
+	border-top: 1px solid #cfcfcf;
+	background: #fff;
+}
+#myHeader .install-nav > li:hover{
+	background: #cfcfcf;
+}
+#myHeader .search{
+	width: 5%;
+	height: 100%;
+	background: url(../img/search.png) no-repeat;
+	background-position: center;
+	float: right;
+	border-left: 1px solid #cfcfcf;
+}
+#myHeader .search:hover{
+	background: url(../img/search-hover.png) no-repeat;
+	background-position: center;
+}
+#myHeader .search-input{
+	width: 0;
+	height: 72%;
+	float: right;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin: auto 0;
+	right: 16%;
+	border: none;
+	outline: none;
+	transition: width 0.6s;
+	-moz-transition: width 0.6s;
+	-webkit-transition: width 0.6s;
+	-o-transition: width 0.6s;
+}
+#myHeader .search-input.show{
+	width: 33%;
+}
+
+#project main{
+	height: 100%;
+	width: 100%;
+	min-height: 400px;
+}
+
+#content{
+	width: 100%;
+	height: 100%;
+	float: left; 
+}
+
+#content .setting{
+	float: right;
+    width: 70px;
+    height: 30px;
+    margin-top: 20px;
+    margin-right: 90px;
+}
+
+#content .setting > img{
+	margin-right: 5px;
+	cursor: pointer;
+}
+
+#content .allproject{
+	width: 100%;
+	padding: 0 90px;
+	float: left;  /*包围子元素*/
+}
+
+#content .allproject .title{
+	font-size: 18px;
+	letter-spacing: 2px;
+}
+
+#content .allproject hr{
+    width: 92%;
+    height: 1px;
+    border: 0;
+    background-image: linear-gradient(to right,rgba(0,0,0,.12) 0,rgba(0,0,0,0) 100%);
+    background-repeat: repeat-x;
+    margin-left: 95px;
+    margin-top: -12px;
+}
+
+#content .prolist{
+	width: 100%;
+	height: 100%;
+	float: left;
+	/*min-height: 500px;*/
+    margin-top: 45px;
+}
+
+#content .prolist li{
+	width: 23%;  /*267px*/
+	height: 134px;
+	margin-right: 2%;  /*25px*/
+	margin-bottom: 40px;
+	list-style: none;
+	float: left;
+}
+
+.prolist .pro{
+	width: 100%;
+    height: 100%;
+	cursor: pointer;
+	border: 1px solid #DDD;
+	background: url(../img/cover.png) no-repeat;
+	background-size: cover;
+	position: relative;
+}
+
+.prolist .pro:hover{
+	margin-top: -6px;
+	box-shadow: 6px 8px 8px #CCC;
+}
+
+.prolist .pro:hover > img{
+	display: block;
+}
+
+.prolist .pro > img{
+	width: 25px;
+	height: 25px;
+	opacity: 0.7;
+    top: 12px;
+    right: 8px;
+    position: absolute;
+    display: none;
+}
+
+.prolist .pro > img:hover{
+	opacity: 1;
+}
+
+.prolist .proname{
+	color: #fff;
+	font-weight: normal;
+	letter-spacing: 2px;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+
+.prolist .newpro{
+	width: 100%;
+    height: 100%;
+	cursor: pointer;
+	border: 1px solid #DDD;
+	background-color: #fff;
+}
+
+.prolist .newpro:hover{
+	margin-top: -6px;
+	box-shadow: 6px 8px 8px #CCC;
+}
+
+.newpro .newproname{
+	color: #A6A6A6;
+	font-weight: normal;
+	letter-spacing: 2px;
+	margin: 10px auto;
+    width: 104px;
+}
+
+.prolist .newpro > div{
+	width: 104px;
+	height: 82px;
+    margin: 28px auto;
+	background: url(../img/add.png) no-repeat;
+	background-size: cover;
+}
+
+.prolist .newpro > div:hover{
+	background: url(../img/add1.png) no-repeat;
+}
+
+/*创建项目弹出框*/
+.popwindow{
+	width: 320px;
+	height: 330px;
+	overflow: hidden;
+    border: 1px solid #DDD;
+    background-color: #fff;
+	position: fixed;
+	top: 54px;
+	left: 40%;
+	z-index: 2;
+}
+
+.popwindow > h4{
+	line-height: 48px;
+	text-align: center;
+}
+
+.popwindow > hr{
+	height: 1px;  /*如果不加height:1px;的话，在firefox下会不显示。*/
+	width: 90%;
+	margin: 0 auto;
+    margin-top: -20px;
+	border: 0;
+	background-color: #DDD;
+}
+
+.popwindow .closetip{
+	width: 19px;
+	height: 19px;
+	border: 0;
+	outline: none;
+	background: url(../img/close.png) no-repeat;
+    top: -34px;
+    left: 284px;
+    position: relative;
+	cursor: pointer;
+}
+
+.popwindow .closetip:hover{
+	background: url(../img/closeon.png) no-repeat;
+}
+
+.popwindow > img{
+	width: 146px;
+	height: 118px;
+	display: block;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+.popwindow > form{
+	width: 100%;
+	height: 85px;
+	/*margin: 0 auto;*/
+	margin-top: 20px;
+}
+
+.popwindow input[type="text"]{
+	width: 280px;
+    height: 34px;
+    font-size: 14px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 15px;
+	/*font-weight: bold;*/
+	border: 1px solid #DDD;
+	border-radius: 2px;
+}
+
+.popwindow .btn{
+	width: 280px;
+    height: 34px;
+    font-size: 14px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 15px;
+	color: #fff;
+	font-weight: bold;
+	background-color: #5ab5f7;
+	border: 1px solid #5ab5f7;
+	border-radius: 2px;
+	cursor: pointer;
+}
+
+.popwindow .btn:hover{
+	opacity: 0.8;
+}
+
+/*项目设置弹出框*/
+.popsetting{
+	width: 540px;
+	height: 420px;
+	overflow: auto;
+    border: 1px solid #DDD;
+    background-color: #fff;
+	position: fixed;
+	top: 54px;
+	left: 30%;
+	z-index: 2;
+}
+
+.popsetting > h3{
+	line-height: 48px;
+	text-align: center;
+}
+
+.popsetting .closetip{
+	width: 19px;
+	height: 19px;
+	border: 0;
+	outline: none;
+	background: url(../img/close.png) no-repeat;
+    top: -34px;
+    left: 500px;
+    position: relative;
+	cursor: pointer;
+}
+
+.popsetting .closetip:hover{
+	background: url(../img/closeon.png) no-repeat;
+}
+
+.popsetting > hr{
+	height: 1px;  /*如果不加height:1px;的话，在firefox下会不显示。*/
+	width: 95%;
+	margin: 0 auto;
+    margin-top: -20px;
+	border: 0;
+	background-color: #DDD;
+}
+
+.popsetting > form{
+	width: 100%;
+	height: 300px;
+	font-size: 16px;
+	/*margin: 0 auto;*/
+	margin-top: 20px;
+}
+
+.popsetting form > span{
+    margin-left: 10%;
+    margin-top: 20px; 	
+    display: block;
+}
+
+.popsetting input[type="text"]{
+	width: 428px;
+    height: 40px;
+    display: block;
+    font-size: 16px;
+    margin: 0 auto;
+    margin-top: 15px;
+	/*font-weight: bold;*/
+	border: 1px solid #DDD;
+	border-radius: 2px;
+}
+
+.popsetting textarea{
+	width: 428px;
+	margin: 0 auto;
+	margin-top: 15px;
+	font-size: 16px;
+	line-height: 22px;
+	display: block;
+	border: 1px solid #DDD;
+	border-radius: 2px;
+}
+
+.popsetting input[name="delpro"]{
+	width: 128px;
+    height: 34px;
+    font-size: 14px;
+    display: inline-block;
+    margin-top: 30px;
+    margin-left: 20%;
+	color: #fff;
+	font-weight: bold;
+	background-color: #ff695b;  
+	border: 1px solid #ff695b;
+	border-radius: 2px;
+	cursor: pointer;
+	outline: none;
+}
+
+.popsetting input[name="delpro"]:hover{
+	opacity: 0.8;
+}
+
+.popsetting form > hr{
+	height: 1px;  
+	width: 95%;
+	margin: 0 auto;
+    margin-top: 40px;
+	border: 0;
+	background-color: #DDD;
+}
+
+.popsetting input[name="save"]{
+	width: 128px;
+    height: 34px;
+    font-size: 14px;
+    display: inline-block;
+    margin-top: 30px;
+    margin-left: 14%;
+	color: #fff;
+	font-weight: bold;
+	background-color: #DDD;  
+	border: 1px solid #DDD;
+	border-radius: 2px;
+	cursor: pointer;
+	outline: none;
+}
+
+.popsetting input[name="save"]:hover{
+	background-color: #5ab5f7;  
+	border: 1px solid #5ab5f7;
+}
+
+/*删除项目弹出框*/
+.popdelete{
+	width: 360px;
+	height: 200px;
+	overflow: hidden;
+    border: 1px solid #DDD;
+    background-color: #fff;
+	position: fixed;
+	top: 54px;
+	left: 36%;
+	z-index: 4;
+}
+
+.popdelete > h4{
+	line-height: 48px;
+	text-align: center;
+}
+
+.popdelete > hr{
+	height: 1px;  /*如果不加height:1px;的话，在firefox下会不显示。*/
+	width: 90%;
+	margin: 0 auto;
+    margin-top: -20px;
+	border: 0;
+	background-color: #DDD;
+}
+
+.popdelete .closetip{
+	width: 19px;
+	height: 19px;
+	border: 0;
+	outline: none;
+	background: url(../img/close.png) no-repeat;
+    top: -34px;
+    left: 320px;
+    position: relative;
+	cursor: pointer;
+}
+
+.popdelete .closetip:hover{
+	background: url(../img/closeon.png) no-repeat;
+}
+
+.popdelete > p{
+	font-size: 14px;
+	width: 90%;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+#delform{
+	width: 100%;
+	height: 85px;
+	margin-top: 20px;
+}
+
+#delform input[type="button"]{
+	width: 280px;
+    height: 34px;
+    font-size: 14px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 15px;
+	color: #fff;
+	font-weight: bold;
+	background-color: #ff695b;
+	border: 1px solid #ff695b;
+	border-radius: 2px;
+	outline: none;
+	cursor: pointer;
+}
+
+#delform input[type="button"]:hover{
+	opacity: 0.8;
+}
+
+.poptip{
+	width: 230px;
+	height: 40px;
+    border: 1px solid #DDD;
+    background-color: #fff;
+	position: fixed;
+	bottom: 50px;
+	left: 5%;
+	font-size: 14px;
+	/*z-index: 2;*/
+}
+
+.poptip > img{
+	width: 22px;
+	height: 22px;
+	margin-top: 9px;
+    margin-left: 9px;
+}
+
+.poptip > span{
+    margin-top: -24px;
+    margin-left: 40px;
+    display: block;
+}
+
+.poptip .closetip{
+	width: 19px;
+	height: 19px;
+	border: 0;
+	outline: none;
+	background: url(../img/close.png) no-repeat;
+    top: -20px;
+    left: 200px;
+    position: relative;
+	cursor: pointer;
+}
+
+.poptip .closetip:hover{
+	background: url(../img/closeon.png) no-repeat;
+}
+
+/*背景层*/
+.hidebg{
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	opacity: 0.5;
+	top: 0;
+	left: 0;
+	position: absolute;
+	z-index: 1;
+	display: none;
+}
+
+.hidebg1{
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	opacity: 0.5;
+	top: 0;
+	left: 0;
+	position: absolute;
+	z-index: 3;
+	display: none;
+}
+
+.hide{
+	display: none;
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/jquery-ui.min.css">
+</head>
+<body>
+    <div id="project">
+        <header id="myHeader">
+        	<a href="#" class="logo"><img src="../img/logo.png"></a>
+        	<ul class="header-nav">
+        		<li class="active"><a href="#">项目</a></li>
+        		<li><a href="#">我的</a></li>
+        		<li><a href="#">通知</a></li>
+        	</ul>
+        	<section class="install">
+                <a href="" class="user-name">用户名</a>
+                <ul class="install-nav">
+                    <li><a href="#">账号设置</a></li>
+                    <li><a href="#">退出登录</a></li>
+                </ul>
+            </section>
+            <a href="#" class="search"></a>
+            <input type="text" class="search-input" placeholder="搜索">
+        </header>	
+
+   <main>
+        <nav id="project-nav">
+            <ul>
+                <li class="choose"><a href="#">任务</a></li>
+                <li><a href="#">分享</a></li>
+                <li><a href="#">文件</a></li>
+            </ul>
+            <a href="#" class="project-install">项目设置</a>
+            <a href="#" class="members">成员</a>
+            <!-- 成员侧边栏 -->
+            <aside class="project-members">
+                <div class="title">
+                    <h1>项目成员</h1>
+                    <a href="#" class="close">X</a>
+                </div>
+                <input type="text" class="member-input" placeholder="搜索成员">
+                <a href="#" class="invite-members">邀请新成员</a>
+                <ul class="members-info">
+                    <li>
+                        <p class="name">liuo</p>
+                        <p class="phone">13728737324</p>
+                    </li>
+                    <li>
+                        <p class="name">liuo</p>
+                        <p class="phone">13728737324</p>
+                    </li>
+                </ul>
+            </aside>
+        </nav>
+
+
+        <div id="project-tab-content">
+        </div>
+    </main>
+
+    <!-- 邀请成员模态窗 -->
+    <div id="invite-members-modal">
+        <section class="wrapper">
+            <div class="title">
+                <h1>项目成员</h1>
+                <a href="#" class="close">X</a>
+            </div>
+            <p>账号邀请</p>
+            <input type="text" class="invite-input" placeholder="请输入邮箱，回车确认">
+        </section>
+    </div>
+    <!-- 项目设置模态窗 -->
+    <div id="project-install-modal">
+        <section class="wrapper">
+            <div class="title">
+                <h1>项目设置</h1>
+                <a href="#" class="close">X</a>
+            </div>
+            <label for="project-name">项目名称</label>
+            <input type="text" class="project-name" name="project-name">
+            <label for="project-brief">项目简介</label>
+            <textarea class="project-name" name="project-name" placeholder="介绍一下项目简介"></textarea>
+            <ul class="btn">
+                <li><button class="preserve">保存</button></li>
+                <li><button class="delete">删除</button></li>
+            </ul>
+        </section>
+    </div>
+    <!-- 任务模态窗 -->
+    <div id="task-info-modal">
+        <section class="wrapper">
+            <div class="title">
+                <h1>任务内容</h1>
+                <a href="#" class="close">X</a>
+            </div>
+            <p>任务内容</p>
+            <p class="content">vvv</p>
+            <p>创建者</p>
+            <p class="creator">肖丽霞</p>
+            <p>参与者</p>
+            <p class="participant">彭利</p>
+            <button class="delete">删除任务</button>
+        </section>
+    </div>
+
+</div>
+
+<script src="../js/jquery-3.1.0.min.js"></script>
+<script src="../js/project.js"></script>
+<script src="../js/index.js"></script>
+<script src="../js/jquery-ui.min.js"></script>
+<script src="../js/draggable.js"></script>
+<script src="../js/juicer-min.js"></script>
+</body>
+</html>
