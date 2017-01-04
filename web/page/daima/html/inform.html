@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/inform.css">
+    <link rel="stylesheet" href="../css/jquery-ui.min.css">
+</head>
+<body>
+    <div id="project">
+        <header id="myHeader">
+            <a href="#" class="logo"><img src="../img/logo.png"></a>
+            <ul class="header-nav">
+                <li><a href="#">项目</a></li>
+                <!-- <li><a href="#">我的</a></li> -->
+                <li class="active"><a href="#">通知</a></li>
+            </ul>
+            <section class="install">
+                <a href="" class="user-name">用户名</a>
+                <ul class="install-nav">
+                    <li><a href="#">账号设置</a></li>
+                    <li><a href="#">退出登录</a></li>
+                </ul>
+            </section>
+            <a href="#" class="search"></a>
+            <input type="text" class="search-input" placeholder="搜索">
+        </header>   
+
+        <main>
+          <div class="inform_title">
+              <div>
+                <span>通知</span>
+              </div>
+          </div>
+          <div class="inform_warpper">
+              <div class="inform_content">
+                  <ol class="inform_list">
+                  <script type="text/template" id="tpl">
+                      {@each message as item}
+                       <li>${item.content}</li>
+                       {@/each}
+                  </script>
+                  </ol>
+              </div>
+              <div class="inform_content_left"></div>
+          </div>
+        </main>
+    </div>
+
+
+<script src="../js/jquery-3.1.0.min.js"></script>
+<script src="../js/inform.js"></script>
+<script src="../js/juicer-min.js"></script>
+<!-- <script src="../js/index0.js"></script> -->
+</body>
+</html>

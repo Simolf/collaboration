@@ -1,0 +1,382 @@
+.files{
+	margin: 15px 140px;
+	background-color: #fff;
+}
+
+.files .head{
+	width: 100%;
+	height: 48px;
+	padding: 12px 15px;
+	position: relative;
+}
+
+.files .upload{
+    width: 100px;
+    height: 22px;
+    background: url(../img/load.png) no-repeat;
+	background-size: 21px 20px;
+	background-position: 12%;
+	text-align: right;
+	top: 20px;
+	right: 20px;
+	position: absolute;
+	/*cursor: pointer;*/
+	color: #3DA8F5;
+    font-size: 14px;
+    line-height: 22px;
+    z-index: 1;
+}
+
+.upload .upload_file{
+	width: 100%;
+    height: 100%;
+    opacity: 0;
+	z-index: -1;
+    position: relative;   
+    top: -22px;
+    /*left: 16px;*/
+    /*cursor: pointer;*/
+}
+
+.files .title{
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: #383838;
+    margin-left: 2px;
+}
+
+.line{
+	width: 97%;
+	height: 1px;
+	margin: 0 auto;
+	background-color: #000;
+	opacity: 0.3;
+}
+
+.file-list{
+    /*padding: 0 15px;*/
+    width: 100%;
+    list-style: none;
+}
+
+.file-list > li{
+	width: 100%;
+	height: 50px;
+	font-size: 15px;
+	line-height: 50px;
+	color: grey;
+}
+
+.file-list > li:not(.file-tab):hover{
+	background-color: #F7F7F7;
+}
+
+.file-list > li:not(.file-tab):hover .load_img{
+	visibility: visible;
+}
+
+.file-list > li:not(.file-tab):hover .rename_img{
+	visibility: visible;
+}
+
+.file-list > li:not(.file-tab):hover .del_img{
+	visibility: visible;
+}
+
+.file-list > li > div{
+	width: 100%;
+	height: 100%;
+	padding: 0 15px;
+	line-height: 48px;
+}
+
+.select_img{
+	width: 25px;
+	height: 25px;
+	vertical-align: middle;
+	cursor: pointer;
+	opacity: 0.6;
+}
+
+.select_img:hover{
+	opacity: 1;
+}
+
+.allfile .all_load,
+.allfile .all_del{
+	width: 20px;
+	height: 20px;
+	margin-left: 10px;
+	margin-right: 10px;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.rename_box{
+	width: 260px;
+	height: 100%;
+	display: inline-block;
+}
+
+.rename{
+    width: 150px;
+    height: 24px;
+    border-radius: 2px;
+    border: 1px solid #CCC;
+    margin-left: 3%;
+}
+
+.rename_box > input[type="button"]{
+    outline: none;
+    color: #fff;
+    width: 45px;
+    height: 24px;
+    border-radius: 2px;
+    margin-left: 1%;
+    cursor: pointer;
+}
+
+.rename_box > input[type="button"]:hover{
+	opacity: 0.8;
+}
+
+.rename_box .btn_confirm{
+	background-color: #3DA8F5;
+	border: 1px solid #3DA8F5;
+}
+
+.rename_box .btn_cancel{
+	background-color: #CCC;
+	border: 1px solid #CCC;
+}
+
+.load_img,.rename_img,.del_img{
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+	vertical-align: middle;
+	cursor: pointer;
+	opacity: 0.7;
+	visibility: hidden;
+}
+
+.load_img:hover,
+.rename_img:hover,
+.del_img:hover{
+	opacity: 1;
+}
+
+.file-list > li > div span{
+	font-size: 15px;
+	color: grey;
+}
+
+.line-list{
+	width: 97%;
+	height: 1px;
+	margin-left: 3%;
+	background-color: #000;
+	opacity: 0.2;
+}
+
+/* 排序
+.file-tab .name,
+.file-tab .size,
+.file-tab .update{
+	cursor: pointer;
+}
+
+.file-tab .name > span:hover,
+.file-tab .size:hover,
+.file-tab .update:hover{
+	color: #3DA8F5;
+}*/
+
+.name{
+	width: 48%;
+	height: 100%;
+	margin-left: 10px;
+	display: inline-block;
+}
+
+.name .file{
+	width: 28px;
+	height: 36px;
+	margin-left: 1%;
+	vertical-align: middle;
+}
+
+.name .file_name{
+	margin-left: 3%;
+}
+
+.size,.creator{
+	width: 12%;
+	display: inline-block;
+}
+
+.update{
+	margin-right: 7%;
+}
+
+.fileup{
+	width: 150px;
+	height: 25px;
+}
+
+/*删除弹出框*/
+.popdelete{
+	width: 340px;
+	height: 180px;
+	overflow: hidden;
+    border: 1px solid #DDD;
+    background-color: #fff;
+	position: fixed;
+	top: 54px;
+	left: 36%;
+	/*z-index: 4;*/
+}
+
+.popdelete > h4{
+	line-height: 48px;
+	text-align: center;
+}
+
+.popdelete > hr{
+	height: 1px;  /*如果不加height:1px;的话，在firefox下会不显示。*/
+	width: 90%;
+	margin: 0 auto;
+    margin-top: -20px;
+	border: 0;
+	background-color: #DDD;
+}
+
+.popdelete .closetip{
+	width: 19px;
+	height: 19px;
+	border: 0;
+	outline: none;
+	background: url(../img/close.png) no-repeat;
+    top: -34px;
+    left: 300px;
+    position: relative;
+	cursor: pointer;
+}
+
+.popdelete .closetip:hover{
+	background: url(../img/closeon.png) no-repeat;
+}
+
+.popdelete > p{
+	font-size: 14px;
+	width: 90%;
+	margin: 0 auto;
+	margin-top: 20px;
+	text-align: center;
+}
+
+.delform{
+	width: 100%;
+	height: 85px;
+	margin-top: 20px;
+}
+
+.delform input[type="button"]{
+	width: 280px;
+    height: 34px;
+    font-size: 14px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 15px;
+	color: #fff;
+	font-weight: bold;
+	background-color: #ff695b;
+	border: 1px solid #ff695b;
+	border-radius: 2px;
+	outline: none;
+	cursor: pointer;
+}
+
+.delform input[type="button"]:hover{
+	opacity: 0.8;
+}
+
+/*注销登录btn*/
+.btn_div{
+	width: 100%;
+	height: 85px;
+	margin-top: 20px;
+	padding: 0 20px;
+}
+
+.btn_div input[type="button"]{
+	width: 140px;
+    height: 34px;
+    font-size: 14px;
+    margin-top: 15px;
+	color: #fff;
+	font-weight: bold;
+	border-radius: 2px;
+	outline: none;
+	cursor: pointer;
+}
+
+.btn_div input[type="button"]:hover{
+	opacity: 0.8;
+}
+
+.btn_div .quit{
+	background-color: #ff695b;
+	border: 1px solid #ff695b;
+}
+
+.btn_div .cancel{
+    margin-left: 13px;
+	background-color: #3DA8F5;
+	border: 1px solid #3DA8F5;
+}
+
+/*删除成功提示*/
+.poptip{
+	width: 230px;
+	height: 40px;
+    border: 1px solid #DDD;
+    background-color: #fff;
+	position: fixed;
+	bottom: 50px;
+	left: 5%;
+	font-size: 14px;
+}
+
+.poptip > img{
+	width: 22px;
+	height: 22px;
+	margin-top: 9px;
+    margin-left: 9px;
+}
+
+.poptip > span{
+    margin-top: -24px;
+    margin-left: 40px;
+    display: block;
+}
+
+.poptip .closetip{
+	width: 19px;
+	height: 19px;
+	border: 0;
+	outline: none;
+	background: url(../img/close.png) no-repeat;
+    top: -20px;
+    left: 200px;
+    position: relative;
+	cursor: pointer;
+}
+
+.poptip .closetip:hover{
+	background: url(../img/closeon.png) no-repeat;
+}
+
+.hidden{
+	display: none;
+}

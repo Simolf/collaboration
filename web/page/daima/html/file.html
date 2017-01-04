@@ -1,0 +1,137 @@
+ <div class="files">
+    <div class="head">
+        <span class="title">文件库</span>
+        <form id="file-form" runat="server" method="post" enctype="multipart/form-data"> 
+            <div class="upload">上传文件<input type="file" class="upload_file"></div>
+        </form>
+    </div>
+    <hr class="line">
+    <ul class="file-list">
+    <script type="text/template" id="tpl2">
+        <li class="file-tab">
+           <div>
+               <img class="select_img" src="../img/select.png">
+               <div class="name">
+                   <span>名称</span>
+                   <div class="allfile hidden">
+                        <img class="all_load" src="../img/load_all.png" title="下载">
+                        <img class="all_del" src="../img/del_all.png" title="删除">
+                   </div>
+               </div>
+               <span class="size">大小</span>
+               <span class="creator">创建者</span>
+               <span class="update">更新时间</span>
+           </div>
+        </li>
+        {@each file as item}
+         <li data-src="${item.filePath}">
+             <div>
+                 <hr class="line-list">
+                 <img class="select_img" src="../img/select.png">
+                 <div class="name">
+                     <img class="file" src="../img/file.png"><span class="file_name">${item.fileName}</span>
+                     <form class="rename_box hidden" action="" method="post">
+                         <input type="text" class="rename"><input type="button" class="btn_confirm" value="确定"><input type="button" class="btn_cancel" value="取消">
+                     </form>
+                 </div>
+                 <span class="size">大小</span>
+                 <span class="creator">创建者</span>
+                 <span class="update">更新时间</span>
+                 <img class="load_img" src="../img/load_no.png" title="下载">
+                 <img class="rename_img" src="../img/change_no.png" title="重命名">
+                 <img class="del_img" src="../img/del_no.png" title="删除">
+             </div>
+         </li>
+         {@/each}
+  <!--    <li>
+        <div>
+             <hr class="line-list">
+             <img class="select_img" src="../img/select.png">
+             <div class="name">
+                 <img class="file" src="../img/file.png"><span class="file_name">名称2</span>
+                 <form class="rename_box hidden" action="" method="post">
+                     <input type="text" class="rename"><input type="button" class="btn_confirm" value="确定"><input type="button" class="btn_cancel" value="取消">
+                 </form>
+             </div>
+             <span class="size">大小</span>
+             <span class="creator">创建者</span>
+             <span class="update">更新时间</span>
+             <img class="load_img " src="../img/load_no.png" title="下载">
+             <img class="rename_img " src="../img/change_no.png" title="重命名">
+             <img class="del_img " src="../img/del_no.png" title="删除">
+         </div>
+     </li>
+     <li>
+         <div>
+             <hr class="line-list">
+             <img class="select_img" src="../img/select.png">
+              <div class="name">
+                 <img class="file" src="../img/file.png"><span class="file_name">名称3</span>
+                 <form class="rename_box hidden" action="" method="post">
+                     <input type="text" class="rename"><input type="button" class="btn_confirm" value="确定"><input type="button" class="btn_cancel" value="取消">
+                 </form>
+             </div>
+             <span class="size">大小</span>
+             <span class="creator">创建者</span>
+             <span class="update">更新时间</span>
+             <img class="load_img " src="../img/load_no.png" title="下载">
+             <img class="rename_img " src="../img/change_no.png" title="重命名">
+             <img class="del_img " src="../img/del_no.png" title="删除">
+         </div>
+     </li> -->
+        </script>
+    </ul>
+
+    <!-- 删除单个文件 -->
+    <div class="popdelete hidden" id="popdelete">
+        <h4>删除文件</h4><button class="closetip"></button>
+        <hr>
+        <p>确定要永远删除这个文件吗？</p>
+        <form name="delform" id="delform" class="delform" method="post" action="#">
+            <input type="button" name="del" id="del" value="删除">
+        </form>
+    </div>
+
+    <!-- 删除所有文件 -->    
+    <div class="popdelete hidden" id="alldelete">
+        <h4>删除文件</h4><button class="closetip"></button>
+        <hr>
+        <p>确定要删除所有文件吗？</p>
+        <form name="delAll" id="delAll" class="delform" method="post" action="#">
+            <input type="button" name="btn_del" id="btn_del" value="删除">
+        </form>
+    </div>
+
+    <!-- 删除成功提示 -->
+    <div class="poptip hidden" id="projecttip">
+        <img src="../img/success.png"> 
+        <span>已成功删除项目！</span>
+        <button class="closetip"></button>
+    </div>
+
+     <!-- 上传成功提示 -->
+    <div class="poptip hidden" id="filetip">
+        <img src="../img/success.png"> 
+        <span>已成功上传文件！</span>
+        <button class="closetip"></button>
+    </div>
+
+     <!-- 下载成功提示 -->
+    <div class="poptip hidden" id="loadtip">
+        <img src="../img/success.png"> 
+        <span>文件下载成功！</span>
+        <button class="closetip"></button>
+    </div>
+
+    <!-- 退出登录 -->
+    <div class="popdelete hidden" id="quitpop">
+        <h4>退出登录</h4><button class="closetip"></button>
+        <hr>
+        <p>您确定要注销账号吗？</p>
+        <div class="btn_div" >
+            <input type="button" name="quit" class="quit" value="退出">
+            <input type="button" name="cancel" class="cancel" value="取消">
+        </div>
+    </div>
+
+</div>
